@@ -1,5 +1,6 @@
 import { Body, Controller, Get, Post, Req, UseGuards } from '@nestjs/common';
-import { AuthGuard, AuthenticatedRequest } from '../auth/auth.guard';
+import { AuthGuard } from '../auth/auth.guard';
+import type { AuthenticatedRequest } from '../auth/auth.guard';
 import { AdvisoryService } from './advisory.service';
 
 @Controller('advisories')

@@ -1,4 +1,4 @@
-﻿import {
+import {
   Inject,
   Injectable,
   OnModuleDestroy,
@@ -11,8 +11,12 @@ export class DatabaseService implements OnModuleInit, OnModuleDestroy {
   constructor(@Inject('PG_POOL') private readonly pool: Pool) {}
 
   async onModuleInit() {
-    await this.pool.query('SELECT 1');
-    console.log('PostgreSQL connection successful.');
+    try {
+      await this.pool.query('SELECT 1');
+      console.log('Database layer ready.');
+    } catch (err) {
+      console.warn('Database not connected — some features may not work:', err instanceof Error ? err.message : err);
+    }
   }
 
   async onModuleDestroy() {

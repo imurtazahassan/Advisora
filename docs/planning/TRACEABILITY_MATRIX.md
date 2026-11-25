@@ -63,8 +63,9 @@ The approved architecture identifies authentication and biometric device/server 
 | ASR-08 | VS-01, VS-05 | Device/server trust boundary and biometric authorization |
 | NFR-02 | VS-01, VS-05, VS-06 | Security and authorization enforcement |
 | ADR-004 | VS-01, VS-05, VS-06 | Four-stage authorization separation and ephemeral authorization tokens |
+| ED-01 (Delegated) | VS-01 | 12-character registration password minimum (`login` remains compatible with existing valid accounts) |
 
-**Traceability note:** The current FR-01 to FR-17 baseline does not provide a separate functional requirement ID for general user login. Do not invent one. Verify the detailed authentication and recovery scope against the approved architecture and ADR-004.
+**Traceability note:** The current FR-01 to FR-17 baseline does not provide a separate functional requirement ID for general user login. Do not invent one. Verify the detailed authentication and recovery scope against the approved architecture, ADR-004, and delegated decision ED-01.
 
 ## 5. Non-Functional Requirements
 
@@ -166,9 +167,11 @@ Outstanding specification work includes:
 | XC-01 to XC-12 mapping | Planning baseline; source verification required |
 | ADR-001 to ADR-005 mapping | Planning baseline; architecture consistency review required |
 | Accepted OQ decisions | Recorded; implementation specifications remain subject to validation |
-| Implementation and test status | Not claimed complete |
+| Delegated decision `ED-01` | Recorded and implemented in `VS-01` (12-char registration minimum) |
+| `VS-01` (`ASR-08`, `NFR-02`, `ADR-004`, `ED-01`) | **ACCEPTED (2026-11-25)** — verified on dev/test in-memory DB; target Postgres `001`–`002` pending |
+| `VS-02` through `VS-09` status | Pending incremental verification and human acceptance |
 
-**Overall status: RECONCILED PLANNING DRAFT — READINESS VERIFICATION PENDING**
+**Overall status: VS-01 ACCEPTED (2026-11-25); VS-02–VS-09 VERIFICATION AND ACCEPTANCE PENDING**
 
 No requirement is marked implemented or tested merely by this matrix.
 

@@ -18,6 +18,9 @@ export class AuthGuard implements CanActivate {
     if (!header?.startsWith('Bearer ')) throw new UnauthorizedException('Authentication required');
     try {
       const payload = await this.jwt.verifyAsync<{ sub: string; email: string; sid: string }>(header.slice(7));
+      if (!payload?.sub || !payload?.email || !payload?.sid) {
+        throw new UnauthorizedException('Invalid session claims');
+      }
       const result = await this.pool.query(
         `SELECT s.id FROM user_sessions s JOIN users u ON u.id = s.user_id
          WHERE s.id = $1 AND s.user_id = $2 AND s.revoked_at IS NULL AND s.expires_at > NOW()`,

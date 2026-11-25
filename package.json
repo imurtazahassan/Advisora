@@ -1,0 +1,16 @@
+{
+  "name": "advisora",
+  "version": "0.0.1",
+  "private": true,
+  "description": "ADVISORA — Human-Controlled Digital-Asset Advisory Application",
+  "scripts": {
+    "postinstall": "npm --prefix backend install --no-audit --no-fund && npm --prefix frontend install --no-audit --no-fund",
+    "build:frontend": "npm --prefix frontend run build",
+    "build:backend": "npm --prefix backend run build",
+    "build": "npm run build:frontend && npm run build:backend",
+    "lint": "npm --prefix backend run lint && npm --prefix frontend run lint",
+    "test": "npm --prefix backend test -- --runInBand",
+    "dev": "npm run build && node backend/dist/main",
+    "start": "node backend/dist/main"
+  }
+}

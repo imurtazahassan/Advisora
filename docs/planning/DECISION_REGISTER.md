@@ -112,3 +112,19 @@ These decisions were already resolved in the approved Deliverable 3 PRD. They ar
 - Use native device operating-system biometric procedures, including Face ID or Touch ID where supported.
 - PIN recovery requires two-factor OTP verification sent to the registered phone or email.
 - OTP is for PIN recovery and is not a substitute for per-tranche device authorization.
+
+---
+
+## Engineering Decisions (Human-Delegated Authority)
+
+These decisions record explicit engineering resolutions for specifications left open by the Deliverable 3 baseline. They preserve all approved requirements, ADRs, and safety thresholds and do not retroactively claim that the original PRD or ADRs mandated the chosen numeric parameter.
+
+### ED-01 — Registration Password Minimum Length (12 Characters)
+
+**Authority:** Technical lead under explicit human-delegated engineering authority (2026-11-25)  
+**Scope:** `VS-01` User Access and Device Security (`AC-01.1`, `AC-01.4`)
+
+- **Decision:** Set the minimum password length for new user registration (`POST /auth/register` and frontend registration form) to **12 characters**.
+- **Compatibility Rule:** `POST /auth/login` continues to authenticate existing valid accounts regardless of whether an older account's password is shorter than 12 characters.
+- **Rationale:** Neither `PRD.md` (`FR-01`–`FR-17`, `NFR-02`, `Resolved OQ-06`), `architecture.md` (`ASR-08`), `ADR-004`, nor `ACCEPTANCE_CRITERIA.md` defines a numeric password length. Aligning implementation with the 12-character policy previously drafted in `docs/evidence/VS-01/ACCEPTANCE_REPORT.md` provides stronger credential security without contradicting any approved baseline rule.
+- **Preservation Note:** Original Deliverable 3 baseline documents remain unmodified.

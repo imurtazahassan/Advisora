@@ -1,7 +1,7 @@
 # Deliverable 4 — Implementation Tracker
 
 **Project:** Human-Controlled Digital-Asset Advisory Application  
-**Status:** VS-01 and VS-02 implementation in progress; VS-03 safety foundation added but signal generation blocked by unresolved approved business rules; build, test and database verification pending  
+**Status:** VS-01 ACCEPTED (2026-11-25, dev/test in-memory DB baseline; target PostgreSQL verification pending); VS-02–VS-09 remain unaccepted  
 **Last updated:** 2026-11-25
 
 ## 1. Purpose
@@ -17,15 +17,15 @@ A slice is not complete merely because code has been written. Its acceptance cri
 | Total vertical slices | 9 |
 | Not started | 0 |
 | Blocked by unresolved approved rules | 1 (VS-03 generation) |
-| Implementation added; verification pending | 8 |
-| Testing | 0 |
-| Accepted | 0 |
+| Implementation added; verification pending | 7 |
+| Verified (dev/test); awaiting human acceptance | 0 |
+| Accepted | 1 (VS-01) |
 
 ## 3. Vertical Slice Tracker
 
 | Slice | Name | Implementation | Testing | Acceptance |
 |---|---|---|---|---|
-| VS-01 | User Access and Device Security | IMPLEMENTATION RETAINED/EXPANDED | NOT RUN | NOT ACCEPTED |
+| VS-01 | User Access and Device Security | IMPLEMENTATION COMPLETE (ED-01 12-CHAR + ED25519 DEVICE UI) | UNIT (42/42), E2E (5/5) & PORT 3000 PASS (IN-MEMORY DB); TARGET POSTGRES PENDING | ACCEPTED (2026-11-25) |
 | VS-02 | Market Data and Asset Eligibility | IMPLEMENTATION RETAINED | NOT RUN | NOT ACCEPTED |
 | VS-03 | Advisory Signal Generation | FOUNDATION ADDED; GENERATION BLOCKED BY APPROVED OPEN RULES | NOT RUN | NOT ACCEPTED |
 | VS-04 | Investment Plan Management | IMPLEMENTATION ADDED | NOT RUN | NOT ACCEPTED |
@@ -70,10 +70,11 @@ A slice can be marked ACCEPTED only when:
 | 2026-11-25 | VS-02 | Simulated market-data provider, PostgreSQL tick persistence, freshness/latency policy, authenticated API, dashboard market overview, and boundary policy tests added | Implementation in progress; build, Jest, migration and end-to-end verification not run | backend/src/market_ingestion/; backend/src/database/migrations/003_market_data.sql; docs/evidence/VS-02/ |
 | 2026-11-25 | VS-03 | Added advisory history/accuracy API, 60-second expiry and strict price-shift policy helpers, schema migration, and fail-closed generation endpoint | Signal creation deliberately blocked: approved target yield, volatility calculation/reset method, and VS-02 asset eligibility remain unresolved; tests not run | backend/src/advisories/; backend/src/database/migrations/004_advisory_signals.sql; docs/evidence/VS-03/ |
 | 2026-11-25 | VS-04–VS-09 | Added plan lifecycle, tranche scheduler and signed authorization gate, simulated execution ledger, in-app outbox, watchlist, journal, trade history/CSV export, frontend dashboard sections, migrations and setup documentation | Implementation added; automated build/tests and PostgreSQL/E2E verification not run | backend/src/plans/; backend/src/execution/; backend/src/supporting/; backend/src/database/migrations/005_*.sql; backend/src/database/migrations/006_*.sql; docs/evidence/VS-04/ through VS-09/ |
+| 2026-11-25 | VS-01 | Recorded delegated decision `ED-01` (12-char min password), aligned backend/frontend validation, hardened AuthGuard/Ed25519 input checks, added WebCrypto device UI, ran 42 unit + 5 E2E + build + lint + port 3000 checks | Explicit human `ACCEPT` recorded (2026-11-25, dev/test in-memory DB baseline; live PostgreSQL `001`/`002` pending) | docs/planning/DECISION_REGISTER.md; backend/test/vs01-auth.e2e-spec.ts; docs/evidence/VS-01/ACCEPTANCE_REPORT.md |
 
 ## 7. Project-Level Validation
 
-- [ ] All nine vertical slices accepted.
+- [ ] All nine vertical slices accepted (`1/9` accepted: `VS-01`).
 - [ ] Integration tests passed.
 - [ ] Security requirements verified.
 - [ ] Quality targets measured.
@@ -81,4 +82,4 @@ A slice can be marked ACCEPTED only when:
 - [ ] README and setup instructions verified.
 - [ ] Evidence package reviewed.
 
-**Current project status: IMPLEMENTATION ADDED ACROSS ALL NINE SLICES; VS-03 GENERATION BLOCKED BY OPEN APPROVED RULES; FULL BUILD/TEST/DATABASE/E2E VERIFICATION PENDING — NO SLICE ACCEPTED**
+**Current project status: VS-01 ACCEPTED (2026-11-25); VS-02–VS-09 IMPLEMENTATION PRESENT BUT UNACCEPTED (VS-03 GENERATION BLOCKED BY OPEN APPROVED RULES)**

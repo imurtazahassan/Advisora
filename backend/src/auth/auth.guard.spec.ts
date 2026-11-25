@@ -1,9 +1,9 @@
 import { ExecutionContext, UnauthorizedException } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
-import { Pool } from 'pg';
+import type { Pool } from 'pg';
 import { AuthGuard } from './auth.guard';
 
-describe('AuthGuard', () => {
+describe('AuthGuard (VS-01)', () => {
   const jwt = { verifyAsync: jest.fn() } as unknown as JwtService;
   const pool = { query: jest.fn() } as unknown as Pool;
   const guard = new AuthGuard(jwt, pool);
@@ -18,8 +18,17 @@ describe('AuthGuard', () => {
 
   beforeEach(() => jest.clearAllMocks());
 
-  it('rejects requests without a bearer token', async () => {
+  it('rejects requests without a bearer token or with wrong scheme', async () => {
     await expect(guard.canActivate(context())).rejects.toBeInstanceOf(UnauthorizedException);
+    await expect(guard.canActivate(context('Basic abc123'))).rejects.toBeInstanceOf(UnauthorizedException);
+  });
+
+  it('rejects invalid JWT signatures or incomplete claims', async () => {
+    (jwt.verifyAsync as jest.Mock).mockRejectedValueOnce(new Error('invalid signature'));
+    await expect(guard.canActivate(context('Bearer bad'))).rejects.toBeInstanceOf(UnauthorizedException);
+
+    (jwt.verifyAsync as jest.Mock).mockResolvedValueOnce({ sub: 'user-1', email: 'a@b.com' });
+    await expect(guard.canActivate(context('Bearer nosid'))).rejects.toBeInstanceOf(UnauthorizedException);
   });
 
   it('rejects a token when its persistent session is revoked or missing', async () => {

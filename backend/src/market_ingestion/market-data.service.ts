@@ -1,7 +1,8 @@
 import { Inject, Injectable, ServiceUnavailableException } from '@nestjs/common';
 import { Pool } from 'pg';
 import { PG_POOL } from '../database/database.module';
-import { MARKET_DATA_PROVIDER, MarketDataProvider } from './market-data.provider';
+import { MARKET_DATA_PROVIDER } from './market-data.provider';
+import type { MarketDataProvider } from './market-data.provider';
 import { assessMarketData, MARKET_DATA_LIMITS } from './market-data.policy';
 
 @Injectable()

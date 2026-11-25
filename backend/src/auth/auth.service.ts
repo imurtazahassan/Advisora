@@ -1,6 +1,6 @@
 import { BadRequestException, ConflictException, Injectable, UnauthorizedException, Inject } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
-import * as bcrypt from 'bcrypt';
+import * as bcrypt from 'bcryptjs';
 import { randomBytes, randomUUID, createPublicKey, createHash, verify as verifySignature, KeyObject } from 'node:crypto';
 import { Pool } from 'pg';
 import { UsersService } from '../users/users.service';
@@ -8,20 +8,30 @@ import { PG_POOL } from '../database/database.module';
 
 const SESSION_TTL_MS = 60 * 60 * 1000;
 const DEVICE_CHALLENGE_TTL_MS = 5 * 60 * 1000;
+const MIN_REGISTRATION_PASSWORD_LENGTH = 12;
+const UUID_REGEX = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
+const BASE64URL_REGEX = /^[A-Za-z0-9_-]+$/;
 
 @Injectable()
 export class AuthService {
   constructor(private readonly usersService: UsersService, private readonly jwtService: JwtService, @Inject(PG_POOL) private readonly pool: Pool) {}
 
   async register(email: string, password: string) {
-    if (!email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) throw new BadRequestException('A valid email is required');
-    if (!password || password.length < 10) throw new BadRequestException('Password must contain at least 10 characters');
+    if (typeof email !== 'string' || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email.trim())) {
+      throw new BadRequestException('A valid email is required');
+    }
+    if (typeof password !== 'string' || password.length < MIN_REGISTRATION_PASSWORD_LENGTH) {
+      throw new BadRequestException(`Password must contain at least ${MIN_REGISTRATION_PASSWORD_LENGTH} characters`);
+    }
     const user = await this.usersService.create(email, password);
     return this.createSession(user);
   }
 
   async login(email: string, password: string) {
-    if (!email || !password) throw new BadRequestException('Email and password are required');
+    // Login stays compatible with existing valid accounts regardless of updated registration minimums
+    if (typeof email !== 'string' || typeof password !== 'string' || !email.trim() || !password) {
+      throw new BadRequestException('Email and password are required');
+    }
     const user = await this.usersService.findByEmail(email);
     if (!user || !(await bcrypt.compare(password, user.password_hash))) throw new UnauthorizedException('Invalid email or password');
     return this.createSession(user);
@@ -49,15 +59,32 @@ export class AuthService {
   }
 
   async registerDevice(userId: string, input: { challengeId: string; deviceName: string; publicKey: string; signature: string }) {
-    if (!input?.challengeId || !input.deviceName?.trim() || input.deviceName.length > 100 || !input.publicKey || !input.signature) throw new BadRequestException('Challenge, device name, public key and signature are required');
+    if (
+      typeof input?.challengeId !== 'string' ||
+      !UUID_REGEX.test(input.challengeId) ||
+      typeof input.deviceName !== 'string' ||
+      !input.deviceName.trim() ||
+      input.deviceName.trim().length > 100 ||
+      typeof input.publicKey !== 'string' ||
+      !input.publicKey.trim() ||
+      typeof input.signature !== 'string' ||
+      !input.signature.trim()
+    ) {
+      throw new BadRequestException('Valid challenge ID, device name, public key and signature are required');
+    }
     let key: KeyObject;
     try { key = createPublicKey(input.publicKey); } catch { throw new BadRequestException('Invalid public key'); }
     if (key.asymmetricKeyType !== 'ed25519') throw new BadRequestException('Only Ed25519 device keys are supported');
+    if (!BASE64URL_REGEX.test(input.signature)) {
+      throw new BadRequestException('Invalid signature encoding');
+    }
+    const signature = Buffer.from(input.signature, 'base64url');
+    if (signature.length !== 64) {
+      throw new BadRequestException('Invalid signature encoding');
+    }
     const challengeResult = await this.pool.query('SELECT challenge FROM device_registration_challenges WHERE id = $1 AND user_id = $2 AND consumed_at IS NULL AND expires_at > NOW()', [input.challengeId, userId]);
     if (!challengeResult.rowCount) throw new UnauthorizedException('Registration challenge is invalid, expired or already used');
     const challenge = challengeResult.rows[0].challenge as string;
-    let signature: Buffer;
-    try { signature = Buffer.from(input.signature, 'base64url'); } catch { throw new BadRequestException('Invalid signature encoding'); }
     if (!verifySignature(null, Buffer.from(challenge, 'utf8'), key, signature)) throw new UnauthorizedException('Device key proof failed');
     const fingerprint = createHash('sha256').update(key.export({ type: 'spki', format: 'der' })).digest('hex');
     const client = await this.pool.connect();
@@ -73,6 +100,9 @@ export class AuthService {
   }
 
   async createDeviceAuthorizationChallenge(userId: string, deviceId: string) {
+    if (typeof deviceId !== 'string' || !deviceId.trim()) {
+      throw new BadRequestException('Device ID is required');
+    }
     const device = await this.pool.query(
       'SELECT id FROM user_devices WHERE id = $1 AND user_id = $2 AND revoked_at IS NULL',
       [deviceId, userId],
@@ -103,8 +133,15 @@ export class AuthService {
     challengeId: string,
     signatureValue: string,
   ) {
-    if (!challengeId || !signatureValue) {
-      throw new BadRequestException('Challenge ID and signature are required');
+    if (
+      typeof deviceId !== 'string' ||
+      !deviceId.trim() ||
+      typeof challengeId !== 'string' ||
+      !challengeId.trim() ||
+      typeof signatureValue !== 'string' ||
+      !signatureValue.trim()
+    ) {
+      throw new BadRequestException('Device ID, challenge ID and signature are required');
     }
 
     const result = await this.pool.query(
@@ -120,11 +157,11 @@ export class AuthService {
       throw new UnauthorizedException('Device challenge is invalid, expired, consumed or device revoked');
     }
 
-    let signature: Buffer;
-    try {
-      signature = Buffer.from(signatureValue, 'base64url');
-      if (signature.length !== 64) throw new Error('Invalid Ed25519 signature length');
-    } catch {
+    if (!BASE64URL_REGEX.test(signatureValue)) {
+      throw new BadRequestException('Invalid signature encoding');
+    }
+    const signature = Buffer.from(signatureValue, 'base64url');
+    if (signature.length !== 64) {
       throw new BadRequestException('Invalid signature encoding');
     }
 
@@ -159,6 +196,9 @@ export class AuthService {
   }
 
   async revokeDevice(userId: string, deviceId: string) {
+    if (typeof deviceId !== 'string' || !UUID_REGEX.test(deviceId)) {
+      throw new BadRequestException('Valid device ID is required');
+    }
     const result = await this.pool.query('UPDATE user_devices SET revoked_at = NOW() WHERE id = $1 AND user_id = $2 AND revoked_at IS NULL RETURNING id', [deviceId, userId]);
     if (!result.rowCount) throw new BadRequestException('Active device not found');
     return { success: true };

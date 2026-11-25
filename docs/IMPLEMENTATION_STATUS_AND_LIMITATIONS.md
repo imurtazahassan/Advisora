@@ -50,10 +50,22 @@ This package integrates the uploaded project baseline with implementation work a
 - Plan adjustment now cancels the previous remainder and inserts the replacement plan/tranches in one database transaction, preventing a failed replacement from leaving the previous plan cancelled.
 - Detailed behavior and boundary cases are recorded in `docs/VS05_SCHEDULER_HARDENING.md`.
 
-## Verification attempted in this environment
+## Verification status in this environment
 
-- Backend `npm ci --ignore-scripts --no-audit --no-fund` timed out in this environment; dependencies were not installed.
-- Global TypeScript compiler cannot run project type-check because `@types/node` and `@types/jest` are not installed.
-- No PostgreSQL server/client is available here; migrations were not applied.
+- **Build (`npm run build`)**: Passed (0 errors across Vite frontend and NestJS backend).
+- **Lint (`npm run lint`)**: Passed with 0 errors (4 pre-existing/type-aware warnings in `backend`, 2 hook warnings in `frontend`).
+- **Backend Unit Tests (`npm test`)**: Passed after configuring Jest/NestJS 12 ESM mode (`backend/jest.config.ts`, `backend/jest.setup.ts`) — **7/7 suites passed, 32/32 tests passed** (`auth.service.spec.ts`, `auth.guard.spec.ts`, `app.controller.spec.ts`, `plans.policy.spec.ts`, `execution.policy.spec.ts`, `advisory.policy.spec.ts`, `market-data.policy.spec.ts`).
+- **Backend E2E Smoke Test (`npm --prefix backend run test:e2e`)**: Passed (`test/app.e2e-spec.ts`, 1/1 suite, 1/1 test, running against the dev/test in-memory adapter).
+- **PostgreSQL Database & Migrations (`001`–`006`)**: No PostgreSQL server/client is running in this AI Studio container, so SQL migrations `001`–`006` and live PostgreSQL integration/immutability-trigger tests remain unverified against real Postgres.
 
-Do not describe any vertical slice as accepted until the required tests and human review pass.
+## AI Studio Runtime Migration (Development / Demo-Only)
+
+- Added root `package.json` orchestrating `backend/` and `frontend/` build, lint, test, and single-process port 3000 startup (`0.0.0.0`), with `frontend/dist` served statically by NestJS (`backend/src/main.ts`) and same-origin `API` default in `frontend/src/App.tsx`.
+- Swapped native `bcrypt` to pure-JS `bcryptjs` (`backend/package.json`, `backend/src/auth/auth.service.ts`, `backend/src/users/users.service.ts`) preserving cost factor 12.
+- Added a development/demo-only in-memory PostgreSQL adapter (`backend/src/database/in-memory-pg.ts`, wired in `backend/src/database/database.module.ts`). PostgreSQL remains the authoritative persistent database architecture (ADR-003).
+  - **Strict Fail-Closed Guard:** The in-memory fallback is permitted ONLY when `NODE_ENV` is `development` or `test` and either `USE_IN_MEMORY_DB=true`, `DB_HOST` is unset, or the exact unconfigured `.env.example` placeholder (`localhost` / `postgres` / `advisora` / `change_me`) receives `ECONNREFUSED`. Any custom `DB_HOST`/`DB_NAME`/`DB_USER`/non-placeholder `DB_PASSWORD`, `USE_IN_MEMORY_DB=false`, PostgreSQL auth/DB errors (`28P01`, `3D000`), or non-dev/test `NODE_ENV` (`production`, etc.) fails loudly at startup.
+  - **Data Volatility:** All in-memory state (users, sessions, devices, plans, tranches, ticks, trades, watchlists, journal notes, notifications) is non-persistent and lost on process restart.
+- Added a development/test-only ephemeral `JWT_SECRET` fallback in `backend/src/auth/auth.module.ts` (`NODE_ENV` = `development` or `test`); non-dev/test startup fails closed if `JWT_SECRET` is missing or a placeholder.
+- Fixed NestJS DI export of `JwtModule` in `backend/src/auth/auth.module.ts`, TypeScript `TS1272` `import type` annotations across controllers/services, and Jest ESM support (`backend/jest.config.ts`, `backend/jest.setup.ts`, `backend/test/jest-e2e.json`).
+
+**Acceptance status:** Runtime adaptation is conditionally approved for development/demo execution only. **No vertical slice (VS-01 through VS-09) is accepted** until incremental validation, PostgreSQL verification, required tests, and human review pass.

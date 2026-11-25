@@ -1,10 +1,10 @@
-﻿import {
+import {
   ConflictException,
   Inject,
   Injectable,
 } from '@nestjs/common';
 import { Pool } from 'pg';
-import * as bcrypt from 'bcrypt';
+import * as bcrypt from 'bcryptjs';
 import { PG_POOL } from '../database/database.module';
 
 @Injectable()

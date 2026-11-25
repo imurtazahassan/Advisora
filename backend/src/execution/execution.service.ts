@@ -1,5 +1,5 @@
 import { BadRequestException, ConflictException, Inject, Injectable, NotFoundException, UnauthorizedException, OnModuleInit, OnModuleDestroy } from '@nestjs/common';
-import { Pool } from 'pg'; import { randomBytes,randomUUID,createPublicKey,verify as verifySignature } from 'node:crypto'; import { PG_POOL } from '../database/database.module'; import { evaluateTrancheAuthorization } from './execution.policy'; import { EXCHANGE_EXECUTION_PORT, ExchangeExecutionPort } from '../exchange/exchange-execution.port';
+import { Pool } from 'pg'; import { randomBytes,randomUUID,createPublicKey,verify as verifySignature } from 'node:crypto'; import { PG_POOL } from '../database/database.module'; import { evaluateTrancheAuthorization } from './execution.policy'; import { EXCHANGE_EXECUTION_PORT } from '../exchange/exchange-execution.port'; import type { ExchangeExecutionPort } from '../exchange/exchange-execution.port';
 @Injectable() export class ExecutionService implements OnModuleInit,OnModuleDestroy { private timer?:ReturnType<typeof setInterval>; constructor(@Inject(PG_POOL) private readonly pool:Pool,@Inject(EXCHANGE_EXECUTION_PORT) private readonly exchange:ExchangeExecutionPort){}
  onModuleInit(){this.timer=setInterval(()=>{void this.advanceAll().catch(()=>undefined);},5000);}
  onModuleDestroy(){if(this.timer)clearInterval(this.timer);}
