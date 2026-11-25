@@ -1,0 +1,367 @@
+﻿BASELINE TRACEABILITY AUDIT
+Generated: 11/25/2026 07:18:47
+
+===== BASELINE FILE INVENTORY =====
+.\docs\baseline\deliverable-3\AGENTS.md
+.\docs\baseline\deliverable-3\architecture.md
+.\docs\baseline\deliverable-3\PRD.md
+.\docs\baseline\deliverable-3\README.md
+.\docs\baseline\deliverable-3\ADR\ADR-001-architecture-style.md
+.\docs\baseline\deliverable-3\ADR\ADR-002-component-boundaries.md
+.\docs\baseline\deliverable-3\ADR\ADR-003-data-persistence.md
+.\docs\baseline\deliverable-3\ADR\ADR-004-authentication-authorization.md
+.\docs\baseline\deliverable-3\ADR\ADR-005-external-integrations.md
+.\docs\baseline\deliverable-3\architecture-evidence\01-asr-identification.md
+.\docs\baseline\deliverable-3\architecture-evidence\02-architectural-decisions.md
+.\docs\baseline\deliverable-3\architecture-evidence\03-ai-structure-evaluation.md
+.\docs\baseline\deliverable-3\architecture-evidence\04-architecture-refinement-log.md
+.\docs\baseline\deliverable-3\architecture-evidence\05-group-contribution-log.md
+.\docs\baseline\deliverable-3\architecture-evidence\06-ai-agent-interaction-log.md
+.\docs\baseline\deliverable-3\diagrams\architecture-context.mmd
+.\docs\baseline\deliverable-3\diagrams\component-diagram.mmd
+.\docs\baseline\deliverable-3\diagrams\data-flow-diagram.mmd
+.\docs\baseline\deliverable-3\diagrams\trade-auth-flow.mmd
+
+===== PRD REQUIREMENT REFERENCES =====
+Line 6: **Functional requirements:** FR-01–FR-14
+  BEFORE: **Scope:** Task 5 requirements baseline
+  AFTER:  **Non-functional requirements:** NFR-01–NFR-04
+  AFTER:  **Business rules:** BR-01–BR-12
+Line 7: **Non-functional requirements:** NFR-01–NFR-04
+  BEFORE: **Functional requirements:** FR-01–FR-14
+  AFTER:  **Business rules:** BR-01–BR-12
+  AFTER:  **Constraints:** C-01–C-06
+Line 8: **Business rules:** BR-01–BR-12
+  BEFORE: **Non-functional requirements:** NFR-01–NFR-04
+  AFTER:  **Constraints:** C-01–C-06
+  AFTER:  **Open questions:** OQ-01, OQ-04, OQ-05, OQ-07, OQ-08, OQ-09 (see Section 10; resolved decisions are no longer open)
+Line 9: **Constraints:** C-01–C-06
+  BEFORE: **Business rules:** BR-01–BR-12
+  AFTER:  **Open questions:** OQ-01, OQ-04, OQ-05, OQ-07, OQ-08, OQ-09 (see Section 10; resolved decisions are no longer open)
+  AFTER:  
+Line 10: **Open questions:** OQ-01, OQ-04, OQ-05, OQ-07, OQ-08, OQ-09 (see Section 10; resolved decisions are no longer open)
+  BEFORE: **Constraints:** C-01–C-06
+  AFTER:  
+  AFTER:  > **Baseline note:** Requirements and decisions explicitly accepted by the team are recorded as approved. Open questions remain unresolved unless a prior team decision already settled the relevant behavior. This document does not infer automatic stop-loss execution, guaranteed returns, or authorization beyond the rules stated below.
+Line 62: ### FR-01 — Generate Advisory Signals
+  BEFORE: 
+  AFTER:  
+  AFTER:  **Requirement:** The system shall generate advisory signals for eligible, conservative digital assets, with the information a user needs to evaluate a recommendation.
+Line 66: - **AC-01.1 — Required signal content**
+  BEFORE: 
+  AFTER:  - **Given** the system generates an advisory signal,
+  AFTER:  - **When** the signal is prepared for display or delivery,
+Line 70: - **AC-01.2 — Volatility suppression**
+  BEFORE: - **Then** it shall include the asset name, entry price, target profit yield, risk context, and beginner-friendly English and Urdu explanations.
+  AFTER:  - **Given** an asset's price moves more than 5% upward or downward within a one-hour window,
+  AFTER:  - **When** the system considers generating a new buy signal for that asset,
+Line 74: - **AC-01.3 — Conservative asset eligibility**
+  BEFORE: - **Then** it shall suppress the signal and show a “Market Volatility Warning” until movement settles below the threshold.
+  AFTER:  - **Given** the system evaluates an asset for recommendation,
+  AFTER:  - **When** the asset does not meet the agreed conservative asset-selection criteria,
+Line 84: ### FR-02 — Deliver Notifications
+  BEFORE: 
+  AFTER:  
+  AFTER:  **Requirement:** The system shall deliver generated advisory signals through WhatsApp and mobile push notification channels.
+Line 88: - **AC-02.1 — Dispatch**
+  BEFORE: 
+  AFTER:  - **Given** an advisory signal has been generated,
+  AFTER:  - **When** notification dispatch is initiated,
+Line 92: - **AC-02.2 — Consistent content**
+  BEFORE: - **Then** the system shall attempt delivery through the configured WhatsApp and mobile push channels with enough information for the user to identify and review the signal.
+  AFTER:  - **Given** the same signal is sent through both channels,
+  AFTER:  - **When** the user compares the notifications,
+Line 96: - **AC-02.3 — Accurate delivery status**
+  BEFORE: - **Then** the asset, entry price, target yield, and risk context shall not conflict between channels.
+  AFTER:  - **Given** a notification channel is unavailable or rejects delivery,
+  AFTER:  - **When** the system reports dispatch status,
+Line 107: ### FR-03 — Provide Bilingual Risk Context
+  BEFORE: 
+  AFTER:  
+  AFTER:  **Requirement:** Each advisory signal shall provide beginner-friendly recommendation and risk explanations in English and Urdu.
+Line 111: - **AC-03.1 — Two languages**
+  BEFORE: 
+  AFTER:  - **Given** an advisory signal is prepared,
+  AFTER:  - **When** its explanations are displayed or dispatched,
+Line 115: - **AC-03.2 — Required context**
+  BEFORE: - **Then** English and Urdu explanations shall be provided.
+  AFTER:  - **Given** a user reviews a signal,
+  AFTER:  - **When** the signal details are shown,
+Line 119: - **AC-03.3 — Urdu translation failure**
+  BEFORE: - **Then** the asset name, entry price, target profit yield, and risk context shall be identifiable.
+  AFTER:  - **Given** Urdu translation fails or times out,
+  AFTER:  - **When** the signal is dispatched,
+Line 126: - Audio summaries are not confirmed as a first-release requirement; see OQ-07.
+  BEFORE: - Do not silently represent a signal as fully bilingual when its detailed Urdu translation failed.
+  AFTER:  
+  AFTER:  ### FR-04 — Enforce Signal Validity and Price-Shift Rules
+Line 128: ### FR-04 — Enforce Signal Validity and Price-Shift Rules
+  BEFORE: 
+  AFTER:  
+  AFTER:  **Requirement:** Each advisory signal shall remain valid for exactly one minute after generation unless invalidated earlier by a price increase exceeding 2.0% between signal generation and the user's approval attempt.
+Line 135: - **AC-04.1 — One-minute expiry**
+  BEFORE: 
+  AFTER:  - **Given** an advisory signal is generated,
+  AFTER:  - **When** one minute has elapsed,
+Line 139: - **AC-04.2 — Price-shift invalidation**
+  BEFORE: - **Then** the signal shall expire and can no longer authorize the associated trade.
+  AFTER:  - **Given** a signal is within its validity window,
+  AFTER:  - **When** the asset price has increased by more than 2.0% between generation and the approval attempt,
+Line 143: - **AC-04.3 — Exact 2.0% boundary**
+  BEFORE: - **Then** the system shall lock the Buy button, display “Price Shift Alert,” and invalidate the recommendation.
+  AFTER:  - **Given** the price increase is exactly 2.0%,
+  AFTER:  - **When** the system evaluates the price-shift condition,
+Line 147: - **AC-04.4 — Previously invalidated signal**
+  BEFORE: - **Then** the strict greater-than threshold shall not trigger the Price Shift Alert by itself.
+  AFTER:  - **Given** a signal was invalidated before its expiry time,
+  AFTER:  - **When** the user attempts to authorize it,
+Line 160: ### FR-05 — Configure and Approve Capital Allocation
+  BEFORE: 
+  AFTER:  
+  AFTER:  **Requirement:** The system shall allow the user to choose a positive allocation percentage up to 5% of total user capital and configure a three-tranche plan.
+Line 164: - **AC-05.1 — Maximum allocation**
+  BEFORE: 
+  AFTER:  - **Given** the user enters an allocation percentage,
+  AFTER:  - **When** it is greater than 5%,
+Line 168: - **AC-05.2 — Lower allocation**
+  BEFORE: - **Then** the system shall reject it.
+  AFTER:  - **Given** the user selects a positive allocation below or equal to 5%,
+  AFTER:  - **When** the plan is configured,
+Line 172: - **AC-05.3 — Three equal tranches**
+  BEFORE: - **Then** the system shall use the selected percentage.
+  AFTER:  - **Given** a valid allocation is selected,
+  AFTER:  - **When** the plan is created,
+Line 176: - **AC-05.4 — Plan approval is not trade authorization**
+  BEFORE: - **Then** the total allocation shall be divided into three equal tranches scheduled at fixed 24-hour intervals.
+  AFTER:  - **Given** the user approves the overall plan,
+  AFTER:  - **When** the plan is established,
+Line 180: - **AC-05.5 — Invalid allocation**
+  BEFORE: - **Then** the system shall establish the plan and schedule without executing a trade solely because of Plan Approval.
+  AFTER:  - **Given** the entered allocation is zero, negative, or invalid,
+  AFTER:  - **When** the user submits the plan,
+Line 191: ### FR-06 — Schedule Tranches and Require Individual Authorization
+  BEFORE: 
+  AFTER:  
+  AFTER:  **Requirement:** The system shall schedule three tranches at fixed 24-hour intervals and require separate PIN or biometric authorization before each individual tranche order.
+Line 195: - **AC-06.1 — Scheduling**
+  BEFORE: 
+  AFTER:  - **Given** a plan is approved,
+  AFTER:  - **When** its schedule is established,
+Line 199: - **AC-06.2 — Individual authorization**
+  BEFORE: - **Then** three tranches shall be scheduled at fixed 24-hour intervals.
+  AFTER:  - **Given** a tranche is due for authorization,
+  AFTER:  - **When** the user attempts to proceed,
+Line 203: - **AC-06.3 — Plan approval boundary**
+  BEFORE: - **Then** the system shall require PIN or biometric verification for that tranche.
+  AFTER:  - **Given** the user approved the overall plan,
+  AFTER:  - **When** a later tranche becomes due,
+Line 207: - **AC-06.4 — Execute only after successful checks**
+  BEFORE: - **Then** the system shall still require separate Trade Authorization for that tranche.
+  AFTER:  - **Given** the signal and tranche remain valid and all required checks pass,
+  AFTER:  - **When** the user successfully completes authorization within the allowed window,
+Line 211: - **AC-06.5 — Failed or cancelled authorization**
+  BEFORE: - **Then** the system may proceed with the order.
+  AFTER:  - **Given** authorization fails or is cancelled,
+  AFTER:  - **When** the system processes the attempt,
+Line 222: ### FR-07 — Expire and Skip Unauthorized Tranches
+  BEFORE: 
+  AFTER:  
+  AFTER:  **Requirement:** A scheduled tranche that is not individually authorized within its one-minute authorization window shall expire and be skipped permanently.
+Line 252: ### FR-08 — Pause, Cancel, Restart, or Adjust a Plan
+  BEFORE: 
+  AFTER:  
+  AFTER:  **Requirement:** The system shall allow users to pause upcoming tranches, permanently cancel remaining unexecuted tranches, and restart or adjust a plan.
+Line 287: ### FR-09 — Pause an Active Plan
+  BEFORE: 
+  AFTER:  
+  AFTER:  **Requirement:** The system shall provide a plan-pause control that pauses upcoming tranches and revokes active authorization prompts.
+Line 312: ### FR-10 — Cancel Remaining Tranches
+  BEFORE: 
+  AFTER:  
+  AFTER:  **Requirement:** The system shall let users permanently cancel all remaining unexecuted tranches of a plan.
+Line 337: ### FR-11 — Restart or Adjust a Plan
+  BEFORE: 
+  AFTER:  
+  AFTER:  **Requirement:** The system shall replace an active plan's remaining unexecuted tranches when the user restarts or adjusts it, recalculating a fresh plan from current figures.
+Line 362: ### FR-12 — Detect High Volatility and Suppress Buy Signals
+  BEFORE: 
+  AFTER:  
+  AFTER:  **Requirement:** The system shall monitor price movements and suppress new buy signals when an asset moves more than 5% upward or downward within a one-hour window. It shall display a “Market Volatility Warning” until the movement settles below the threshold.
+Line 394: ### FR-13 — Calculate and Display Signal Accuracy
+  BEFORE: 
+  AFTER:  
+  AFTER:  **Requirement:** The system shall calculate Signal Accuracy over a rolling 30-day period as the percentage of advisory signals that reach their target profit yield without the asset dropping more than 3% from entry price.
+Line 426: ### FR-14 — Enforce Exchange API Key Permissions
+  BEFORE: 
+  AFTER:  
+  AFTER:  **Requirement:** The system shall accept exchange API keys only when they provide read and trade permissions without withdrawal permissions. The application shall not provide withdrawal or transfer functions.
+Line 465: ### NFR-01 — Signal Processing & Validity Verification
+  BEFORE: 
+  AFTER:  
+  AFTER:  **Requirement:** The system shall evaluate the one-minute signal expiry and 2.0% price-shift conditions before accepting a user's trade authorization, and shall reject any expired or invalidated signal.
+Line 471: ### NFR-02 — Authorization & Permission Security
+  BEFORE: 
+  AFTER:  
+  AFTER:  **Requirement:** The system shall require successful PIN or biometric verification for every individual tranche order and reject exchange API keys that include withdrawal permissions.
+Line 477: ### NFR-03 — Bilingual Usability
+  BEFORE: 
+  AFTER:  
+  AFTER:  **Requirement:** Every Advisory Signal shall provide its required risk context and recommendation explanation in both English and Urdu, using beginner-friendly wording.
+Line 485: ### NFR-04 — Notification Delivery
+  BEFORE: 
+  AFTER:  
+  AFTER:  **Requirement:** The system shall deliver each generated Advisory Signal through the configured WhatsApp and mobile push notification channels.
+Line 497: - **BR-01:** A plan's total allocation must not exceed 5% of total user capital; users may choose a lower percentage.
+  BEFORE: 
+  AFTER:  - **BR-02:** Each plan consists of three equal tranches scheduled at fixed 24-hour intervals.
+  AFTER:  - **BR-03:** Every individual tranche order requires separate PIN or biometric Trade Authorization.
+Line 498: - **BR-02:** Each plan consists of three equal tranches scheduled at fixed 24-hour intervals.
+  BEFORE: - **BR-01:** A plan's total allocation must not exceed 5% of total user capital; users may choose a lower percentage.
+  AFTER:  - **BR-03:** Every individual tranche order requires separate PIN or biometric Trade Authorization.
+  AFTER:  - **BR-04:** An Advisory Signal expires exactly one minute after generation unless invalidated earlier by a price shift exceeding 2.0%.
+Line 499: - **BR-03:** Every individual tranche order requires separate PIN or biometric Trade Authorization.
+  BEFORE: - **BR-02:** Each plan consists of three equal tranches scheduled at fixed 24-hour intervals.
+  AFTER:  - **BR-04:** An Advisory Signal expires exactly one minute after generation unless invalidated earlier by a price shift exceeding 2.0%.
+  AFTER:  - **BR-05:** A price increase exceeding 2.0% between signal generation and the approval attempt invalidates the recommendation and locks the Buy button.
+Line 500: - **BR-04:** An Advisory Signal expires exactly one minute after generation unless invalidated earlier by a price shift exceeding 2.0%.
+  BEFORE: - **BR-03:** Every individual tranche order requires separate PIN or biometric Trade Authorization.
+  AFTER:  - **BR-05:** A price increase exceeding 2.0% between signal generation and the approval attempt invalidates the recommendation and locks the Buy button.
+  AFTER:  - **BR-06:** An unauthorized scheduled tranche expires and is skipped permanently when its one-minute authorization window closes.
+Line 501: - **BR-05:** A price increase exceeding 2.0% between signal generation and the approval attempt invalidates the recommendation and locks the Buy button.
+  BEFORE: - **BR-04:** An Advisory Signal expires exactly one minute after generation unless invalidated earlier by a price shift exceeding 2.0%.
+  AFTER:  - **BR-06:** An unauthorized scheduled tranche expires and is skipped permanently when its one-minute authorization window closes.
+  AFTER:  - **BR-07:** A price movement exceeding 5% in either direction within one hour suppresses new buy signals for that asset and triggers a Market Volatility Warning until movement settles below the threshold.
+Line 502: - **BR-06:** An unauthorized scheduled tranche expires and is skipped permanently when its one-minute authorization window closes.
+  BEFORE: - **BR-05:** A price increase exceeding 2.0% between signal generation and the approval attempt invalidates the recommendation and locks the Buy button.
+  AFTER:  - **BR-07:** A price movement exceeding 5% in either direction within one hour suppresses new buy signals for that asset and triggers a Market Volatility Warning until movement settles below the threshold.
+  AFTER:  - **BR-08:** Signal Accuracy is measured over a rolling 30-day period, based on reaching the target profit yield without breaching the 3% loss limit.
+Line 503: - **BR-07:** A price movement exceeding 5% in either direction within one hour suppresses new buy signals for that asset and triggers a Market Volatility Warning until movement settles below the threshold.
+  BEFORE: - **BR-06:** An unauthorized scheduled tranche expires and is skipped permanently when its one-minute authorization window closes.
+  AFTER:  - **BR-08:** Signal Accuracy is measured over a rolling 30-day period, based on reaching the target profit yield without breaching the 3% loss limit.
+  AFTER:  - **BR-09:** Pausing or cancelling a plan does not reverse executed tranches; cancellation carries no extra fees or penalties.
+Line 504: - **BR-08:** Signal Accuracy is measured over a rolling 30-day period, based on reaching the target profit yield without breaching the 3% loss limit.
+  BEFORE: - **BR-07:** A price movement exceeding 5% in either direction within one hour suppresses new buy signals for that asset and triggers a Market Volatility Warning until movement settles below the threshold.
+  AFTER:  - **BR-09:** Pausing or cancelling a plan does not reverse executed tranches; cancellation carries no extra fees or penalties.
+  AFTER:  - **BR-10:** Restarted or adjusted plans use current available wallet balance, the newly selected allocation, and current market conditions, subject to the 5% cap.
+Line 505: - **BR-09:** Pausing or cancelling a plan does not reverse executed tranches; cancellation carries no extra fees or penalties.
+  BEFORE: - **BR-08:** Signal Accuracy is measured over a rolling 30-day period, based on reaching the target profit yield without breaching the 3% loss limit.
+  AFTER:  - **BR-10:** Restarted or adjusted plans use current available wallet balance, the newly selected allocation, and current market conditions, subject to the 5% cap.
+  AFTER:  - **BR-11:** Exchange API keys must permit reading and trading but must not permit withdrawals; transfers and withdrawals through the app are disabled.
+Line 506: - **BR-10:** Restarted or adjusted plans use current available wallet balance, the newly selected allocation, and current market conditions, subject to the 5% cap.
+  BEFORE: - **BR-09:** Pausing or cancelling a plan does not reverse executed tranches; cancellation carries no extra fees or penalties.
+  AFTER:  - **BR-11:** Exchange API keys must permit reading and trading but must not permit withdrawals; transfers and withdrawals through the app are disabled.
+  AFTER:  - **BR-12:** Advisory recommendations are restricted to Bitcoin and Ethereum, or assets ranked in the top 10 by global 24-hour spot volume, provided they meet conservative high-liquidity criteria. High-risk altcoins and illiquid tokens are excluded.
+Line 507: - **BR-11:** Exchange API keys must permit reading and trading but must not permit withdrawals; transfers and withdrawals through the app are disabled.
+  BEFORE: - **BR-10:** Restarted or adjusted plans use current available wallet balance, the newly selected allocation, and current market conditions, subject to the 5% cap.
+  AFTER:  - **BR-12:** Advisory recommendations are restricted to Bitcoin and Ethereum, or assets ranked in the top 10 by global 24-hour spot volume, provided they meet conservative high-liquidity criteria. High-risk altcoins and illiquid tokens are excluded.
+  AFTER:  
+Line 508: - **BR-12:** Advisory recommendations are restricted to Bitcoin and Ethereum, or assets ranked in the top 10 by global 24-hour spot volume, provided they meet conservative high-liquidity criteria. High-risk altcoins and illiquid tokens are excluded.
+  BEFORE: - **BR-11:** Exchange API keys must permit reading and trading but must not permit withdrawals; transfers and withdrawals through the app are disabled.
+  AFTER:  
+  AFTER:  **BR-08 clarification:** The 3% Maximum Loss Limit is strictly a performance-measurement criterion for Signal Accuracy. It does not constitute an automated operational stop-loss or forced sale.
+Line 510: **BR-08 clarification:** The 3% Maximum Loss Limit is strictly a performance-measurement criterion for Signal Accuracy. It does not constitute an automated operational stop-loss or forced sale.
+  BEFORE: 
+  AFTER:  
+  AFTER:  ---
+Line 516: - **C-01:** The product is an advisory application with explicit user authorization for every order, not an autonomous trading bot.
+  BEFORE: 
+  AFTER:  - **C-02:** The initial scope is non-technical retail savers seeking conservative digital-asset exposure, with English and Urdu explanations.
+  AFTER:  - **C-03:** Trade execution depends on a supported exchange integration with appropriate read and trade permissions.
+Line 517: - **C-02:** The initial scope is non-technical retail savers seeking conservative digital-asset exposure, with English and Urdu explanations.
+  BEFORE: - **C-01:** The product is an advisory application with explicit user authorization for every order, not an autonomous trading bot.
+  AFTER:  - **C-03:** Trade execution depends on a supported exchange integration with appropriate read and trade permissions.
+  AFTER:  - **C-04:** WhatsApp and mobile push are the agreed notification channels; actual delivery may depend on external provider availability.
+Line 518: - **C-03:** Trade execution depends on a supported exchange integration with appropriate read and trade permissions.
+  BEFORE: - **C-02:** The initial scope is non-technical retail savers seeking conservative digital-asset exposure, with English and Urdu explanations.
+  AFTER:  - **C-04:** WhatsApp and mobile push are the agreed notification channels; actual delivery may depend on external provider availability.
+  AFTER:  - **C-05:** The plan structure is fixed at three equal tranches separated by 24-hour intervals.
+Line 519: - **C-04:** WhatsApp and mobile push are the agreed notification channels; actual delivery may depend on external provider availability.
+  BEFORE: - **C-03:** Trade execution depends on a supported exchange integration with appropriate read and trade permissions.
+  AFTER:  - **C-05:** The plan structure is fixed at three equal tranches separated by 24-hour intervals.
+  AFTER:  - **C-06:** The product does not guarantee profits or eliminate digital-asset investment risk.
+Line 520: - **C-05:** The plan structure is fixed at three equal tranches separated by 24-hour intervals.
+  BEFORE: - **C-04:** WhatsApp and mobile push are the agreed notification channels; actual delivery may depend on external provider availability.
+  AFTER:  - **C-06:** The product does not guarantee profits or eliminate digital-asset investment risk.
+  AFTER:  
+Line 521: - **C-06:** The product does not guarantee profits or eliminate digital-asset investment risk.
+  BEFORE: - **C-05:** The plan structure is fixed at three equal tranches separated by 24-hour intervals.
+  AFTER:  
+  AFTER:  ---
+Line 529: - **Resolved OQ-02 — Capital calculation:** Calculate total user capital and available allocation strictly from the connected exchange account’s available quote-asset balance (for example, USDT/USD). Exclude unconnected external wallets.
+  BEFORE: 
+  AFTER:  - **Resolved OQ-03 — Primary market-data source:** Use the connected exchange’s real-time WebSocket ticker stream as the primary reference price. During authorization, lock Buy and display “Market Data Unavailable” if ticker latency exceeds 5 seconds or market data is delayed by more than 15 seconds.
+  AFTER:  - **Resolved OQ-06 — Authentication recovery:** Use native device OS biometric procedures, including Face ID/Touch ID. PIN recovery requires two-factor OTP verification sent to the registered phone or email.
+Line 530: - **Resolved OQ-03 — Primary market-data source:** Use the connected exchange’s real-time WebSocket ticker stream as the primary reference price. During authorization, lock Buy and display “Market Data Unavailable” if ticker latency exceeds 5 seconds or market data is delayed by more than 15 seconds.
+  BEFORE: - **Resolved OQ-02 — Capital calculation:** Calculate total user capital and available allocation strictly from the connected exchange account’s available quote-asset balance (for example, USDT/USD). Exclude unconnected external wallets.
+  AFTER:  - **Resolved OQ-06 — Authentication recovery:** Use native device OS biometric procedures, including Face ID/Touch ID. PIN recovery requires two-factor OTP verification sent to the registered phone or email.
+  AFTER:  - **Resolved asset eligibility:** Recommend Bitcoin and Ethereum, or assets in the top 10 by global 24-hour spot volume, subject to conservative high-liquidity criteria; exclude high-risk altcoins and illiquid tokens.
+Line 531: - **Resolved OQ-06 — Authentication recovery:** Use native device OS biometric procedures, including Face ID/Touch ID. PIN recovery requires two-factor OTP verification sent to the registered phone or email.
+  BEFORE: - **Resolved OQ-03 — Primary market-data source:** Use the connected exchange’s real-time WebSocket ticker stream as the primary reference price. During authorization, lock Buy and display “Market Data Unavailable” if ticker latency exceeds 5 seconds or market data is delayed by more than 15 seconds.
+  AFTER:  - **Resolved asset eligibility:** Recommend Bitcoin and Ethereum, or assets in the top 10 by global 24-hour spot volume, subject to conservative high-liquidity criteria; exclude high-risk altcoins and illiquid tokens.
+  AFTER:  - **Resolved verification sample:** Test notification provider acceptance across 1,000 dispatches. The required notification target remains at least 95% provider acceptance per channel within 10 seconds. The one-minute expiry, >2.0% price-shift lock, 5% cap, and zero-withdrawal-permission rule require 100% enforcement in tests.
+Line 537: - **OQ-01:** Which exchange or exchanges will be supported in the first release?
+  BEFORE: 
+  AFTER:  - **OQ-04:** How should the system handle exchange outages, API failures, or market-data failures beyond the approved stale/latency lockout behavior?
+  AFTER:  - **OQ-05:** What additional implementation details are required for plan resumption beyond the approved rule that missed intervals are not triggered retroactively or immediately upon unpausing, and that the next remaining tranche follows the next applicable 24-hour interval?
+Line 538: - **OQ-04:** How should the system handle exchange outages, API failures, or market-data failures beyond the approved stale/latency lockout behavior?
+  BEFORE: - **OQ-01:** Which exchange or exchanges will be supported in the first release?
+  AFTER:  - **OQ-05:** What additional implementation details are required for plan resumption beyond the approved rule that missed intervals are not triggered retroactively or immediately upon unpausing, and that the next remaining tranche follows the next applicable 24-hour interval?
+  AFTER:  - **OQ-07:** Should the app provide local-language audio summaries, as explored in Task 1, or are bilingual text explanations sufficient for the first release?
+Line 539: - **OQ-05:** What additional implementation details are required for plan resumption beyond the approved rule that missed intervals are not triggered retroactively or immediately upon unpausing, and that the next remaining tranche follows the next applicable 24-hour interval?
+  BEFORE: - **OQ-04:** How should the system handle exchange outages, API failures, or market-data failures beyond the approved stale/latency lockout behavior?
+  AFTER:  - **OQ-07:** Should the app provide local-language audio summaries, as explored in Task 1, or are bilingual text explanations sufficient for the first release?
+  AFTER:  - **OQ-08:** What exact user-facing definition, calculation details, and historical records should accompany the Signal Accuracy percentage?
+Line 540: - **OQ-07:** Should the app provide local-language audio summaries, as explored in Task 1, or are bilingual text explanations sufficient for the first release?
+  BEFORE: - **OQ-05:** What additional implementation details are required for plan resumption beyond the approved rule that missed intervals are not triggered retroactively or immediately upon unpausing, and that the next remaining tranche follows the next applicable 24-hour interval?
+  AFTER:  - **OQ-08:** What exact user-facing definition, calculation details, and historical records should accompany the Signal Accuracy percentage?
+  AFTER:  - **OQ-09:** What measurable usability, accessibility, and reliability targets should be used beyond the four NFRs proposed above?
+Line 541: - **OQ-08:** What exact user-facing definition, calculation details, and historical records should accompany the Signal Accuracy percentage?
+  BEFORE: - **OQ-07:** Should the app provide local-language audio summaries, as explored in Task 1, or are bilingual text explanations sufficient for the first release?
+  AFTER:  - **OQ-09:** What measurable usability, accessibility, and reliability targets should be used beyond the four NFRs proposed above?
+  AFTER:  
+Line 542: - **OQ-09:** What measurable usability, accessibility, and reliability targets should be used beyond the four NFRs proposed above?
+  BEFORE: - **OQ-08:** What exact user-facing definition, calculation details, and historical records should accompany the Signal Accuracy percentage?
+  AFTER:  
+  AFTER:  **Implementation note:** The global spot-volume ranking source and objective operational definitions of “high-risk” and “illiquid” should be documented before release, without weakening the approved exclusions.
+Line 684: 10. **Provider dependencies:** Notification attempts and delivery reporting must respect channel/provider status. The stated NFR-04 target is measured against provider acceptance, not a guarantee of end-device receipt.
+  BEFORE: 9. **API permissions:** Read and trade access are required; withdrawal permissions are prohibited. The app has no withdrawal/transfer feature.
+  AFTER:  11. **Asset selection:** Recommend Bitcoin and Ethereum, or assets ranked in the top 10 by global 24-hour spot volume, subject to conservative high-liquidity criteria; exclude high-risk altcoins and illiquid tokens. Document the ranking source and objective classification criteria before release.
+  AFTER:  12. **Market data:** Use the connected exchange real-time WebSocket ticker stream. If latency exceeds 5 seconds or data is delayed by more than 15 seconds during authorization, lock Buy and display “Market Data Unavailable.”
+Line 696: - [ ] Confirm all FR-01–FR-14 criteria remain consistent with the accepted decisions.
+  BEFORE: 
+  AFTER:  - [ ] Confirm NFR-01–NFR-04 verification methods and target measurement period.
+  AFTER:  - [ ] Resolve OQ-01–OQ-09 without changing already-approved behavior unless the team explicitly revises it.
+Line 697: - [ ] Confirm NFR-01–NFR-04 verification methods and target measurement period.
+  BEFORE: - [ ] Confirm all FR-01–FR-14 criteria remain consistent with the accepted decisions.
+  AFTER:  - [ ] Resolve OQ-01–OQ-09 without changing already-approved behavior unless the team explicitly revises it.
+  AFTER:  - [ ] Define the supported asset list and objective liquidity criteria.
+Line 698: - [ ] Resolve OQ-01–OQ-09 without changing already-approved behavior unless the team explicitly revises it.
+  BEFORE: - [ ] Confirm NFR-01–NFR-04 verification methods and target measurement period.
+  AFTER:  - [ ] Define the supported asset list and objective liquidity criteria.
+  AFTER:  - [x] Confirm primary market-data source and stale/latency authorization lockout.
+Line 717: **Context:** During the Deliverable 2 demonstration, the Teaching Assistants acted as clients and provided three additional functional requirements to be incorporated into the product architecture while strictly preserving the approved FR-01 through FR-14 baseline.
+  BEFORE: **Status:** TA-Provided Additional Requirements for Deliverable 3
+  AFTER:  
+  AFTER:  ### FR-15 — Personal Digital-Asset Watchlist
+Line 719: ### FR-15 — Personal Digital-Asset Watchlist
+  BEFORE: 
+  AFTER:  **Requirement:** The system shall allow users to create and manage a personal watchlist of eligible digital assets by adding or removing assets.
+  AFTER:  - **AC-15.1 — Asset Management:** The user shall be able to add eligible digital assets to, or remove assets from, their personal watchlist.
+Line 725: ### FR-16 — Executed Trade History and CSV Export
+  BEFORE: 
+  AFTER:  **Requirement:** The system shall allow users to view and export their confirmed executed trade history as a CSV file for a user-selected date range.
+  AFTER:  - **AC-16.1 — Historical Query:** The system shall display confirmed executed trades filtered by a user-selected date range.
+Line 731: ### FR-17 — Private Investment Decision Journal
+  BEFORE: 
+  AFTER:  **Requirement:** The system shall allow users to maintain a private investment decision journal by adding, editing, and deleting personal notes associated with individual advisory signals or investment plans.
+  AFTER:  - **AC-17.1 — Note Management:** The user shall be able to add, edit, and delete personal journal notes.
+
+===== PLANNING FILES =====
+BASELINE_REQUIREMENTS_EXTRACT.txt | 272188 bytes
+DEPENDENCY_MATRIX.md | 2136 bytes
+PBS.md | 1667 bytes
+PLAN_REVIEW_NOTES.md | 3123 bytes
+TRACEABILITY_MATRIX.md | 9902 bytes
+TRACEABILITY_MATRIX.md.bak | 9843 bytes
+VERTICAL_SLICES.md | 3921 bytes
+WBS.md | 1816 bytes

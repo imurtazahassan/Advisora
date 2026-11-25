@@ -1,0 +1,197 @@
+﻿# Implementation Plan
+
+**Project:** Human-Controlled Digital-Asset Advisory Application  
+**Course:** SE-1001 — Introduction to Software Engineering  
+**Deliverable:** 4  
+**Status:** Draft — Pending review
+
+## 1. Objective
+
+Prepare a controlled, traceable implementation of the approved
+Human-Controlled Digital-Asset Advisory Application.
+
+The implementation must follow the approved Deliverable 3 requirements,
+architectural decisions, and cross-cutting constraints.
+
+## 2. Source of Truth
+
+The following documents govern implementation:
+
+- Approved Deliverable 3 PRD.
+- ADR-001 through ADR-005.
+- Approved architecture documentation.
+- AGENTS.md.
+- Approved requirement and constraint definitions.
+
+This plan does not override these documents.
+
+## 3. Architectural Baseline
+
+The approved architecture uses a Modular Monolith with Ports & Adapters.
+
+Implementation must preserve:
+
+- Clear module boundaries.
+- Explicit component responsibilities.
+- Module-owned persistence.
+- External integrations behind defined ports and adapters.
+- Decoupled messaging where specified.
+- Controlled communication between modules.
+- The approved authentication and authorization boundary.
+
+No architectural decision may be changed without human review and approval.
+
+## 4. Non-Negotiable Safety Requirements
+
+### 4.1 Human authorization
+
+- Every tranche requires fresh, explicit human authorization.
+- The scheduler must not execute trades directly.
+- Authorization expiry must be checked server-side.
+- Authorization is valid for 60 seconds only.
+
+### 4.2 Exchange permissions
+
+- Withdrawal capability must not exist.
+- Do not implement withdrawal endpoints, SDK methods, or data models.
+- Verify exchange API key permissions.
+- Reject keys when withdrawal permissions are enabled or cannot be verified.
+
+### 4.3 Execution ledger
+
+- Executed trades are append-only.
+- Executed trade records cannot be updated or deleted.
+- History and export features must not mutate execution records.
+
+### 4.4 Market safety
+
+- Market data older than 15 seconds locks Buy.
+- Ticker latency greater than 5 seconds locks Buy.
+- Preserve strict greater-than threshold comparisons.
+- Plan resumption must not create retroactive orders.
+
+### 4.5 Open questions
+
+All baseline open questions must remain unresolved until explicitly decided by the responsible humans.
+
+## 5. Proposed Implementation Order
+
+| Order | Slice | Scope |
+|---|---|---|
+| 1 | VS-01 | User Access and Device Security |
+| 2 | VS-02 | Market Data and Asset Eligibility |
+| 3 | VS-03 | Advisory Signal Generation |
+| 4 | VS-04 | Investment Plan Management |
+| 5 | VS-05 | Tranche Scheduling and Human Authorization |
+| 6 | VS-06 | Authorized Trade Execution |
+| 7 | VS-07 | Notifications |
+| 8 | VS-08 | Supporting Investment Features |
+| 9 | VS-09 | Integration and Final Validation |
+
+This sequence is proposed and must be validated against the dependency matrix.
+
+## 6. Vertical Slice Expectations
+
+Each slice must have:
+
+1. A defined user-visible outcome.
+2. Traceable requirements.
+3. Explicit module ownership.
+4. Identified dependencies.
+5. Acceptance criteria.
+6. Unit tests.
+7. Integration tests where applicable.
+8. Security tests where applicable.
+9. Recorded implementation evidence.
+10. Human review before acceptance.
+
+## 7. Feature Coverage
+
+### Core advisory functionality
+
+- Advisory signal generation.
+- Bilingual risk context.
+- Signal validity and price-shift verification.
+- Volatility detection.
+- Signal accuracy.
+
+### Investment plan functionality
+
+- Capital allocation.
+- Plan approval.
+- Tranche scheduling.
+- Individual authorization.
+- Expiry and skipping.
+- Pause, cancellation, restart, and adjustment.
+
+### Supporting functionality
+
+- Personal digital-asset watchlist.
+- Executed trade history and CSV export.
+- Private investment decision journal.
+- Notification delivery.
+
+## 8. Implementation Workflow
+
+For each vertical slice:
+
+1. Inspect its requirements and ADR dependencies.
+2. Confirm scope with the human team.
+3. Identify module boundaries and interfaces.
+4. Define acceptance criteria.
+5. Prepare tests before or alongside implementation.
+6. Implement the smallest complete vertical slice.
+7. Run relevant automated tests.
+8. Review security and architecture compliance.
+9. Record evidence and changes.
+10. Obtain human acceptance before moving forward.
+
+## 9. Testing Strategy
+
+Testing should include:
+
+- Unit testing.
+- Integration testing.
+- API and contract testing.
+- Persistence and immutability testing.
+- Authorization and security testing.
+- Boundary-value testing.
+- Market-data freshness and latency testing.
+- Notification failure testing.
+- End-to-end testing.
+
+Critical safety rules require explicit negative tests.
+
+## 10. Evidence and Documentation
+
+Maintain:
+
+- Requirement traceability.
+- Implementation decisions.
+- Test results.
+- Security verification evidence.
+- Change history.
+- Known issues.
+- Human approval records.
+
+## 11. Change Control
+
+Any proposed change to an approved requirement, ADR, security boundary,
+or unresolved question must be documented and submitted for human review.
+
+No AI agent or automated process may silently approve such a change.
+
+## 12. Current Status
+
+- Deliverable 3 baseline: approved by the team.
+- Deliverable 4 planning: in preparation.
+- Traceability matrix: draft.
+- Implementation plan: draft.
+- Implementation: not yet started or verified by this document.
+- Final implementation approval: pending.
+
+## 13. Approval
+
+This plan is not an approval of implementation.
+
+Human review is required before implementation begins.

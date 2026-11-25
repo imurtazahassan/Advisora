@@ -1,0 +1,6 @@
+Isolated TypeScript policy verification
+Command: tsc backend/src/market_ingestion/market-data.policy.ts --strict --target ES2022 --module commonjs
+Runtime assertions: 5
+Result: PASS
+Coverage: missing tick; exact 15,000 ms / 5,000 ms boundaries; stale at 15,001 ms; latency lock at 5,001 ms; actionable advice remains disabled.
+Qualification: This is not a Jest run, backend build, database test, API integration test, or VS-02 acceptance.

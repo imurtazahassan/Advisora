@@ -1,0 +1,11 @@
+Local policy-helper execution (Node VM loading TypeScript transpile output; not Jest):
+PASS — valid tranche authorization accepted
+PASS — completion after 60-second deadline rejected
+PASS — exactly 2% upward price shift accepted by strict >2% rule
+PASS — upward price shift greater than 2% rejected
+PASS — market data older than 15 seconds rejected
+PASS — ticker latency greater than 5 seconds rejected
+PASS — invalidated signal rejected
+Result: 7/7 checks passed.
+Full service/database integration tests: NOT RUN.
+Native biometric secure-enclave integration: NOT IMPLEMENTED.

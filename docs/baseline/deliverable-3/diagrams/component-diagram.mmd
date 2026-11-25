@@ -1,0 +1,53 @@
+flowchart TD
+    subgraph ModularMonolith ["Modular Monolith (Hexagonal Architecture)"]
+        subgraph MarketDomain ["Market & Risk Domain"]
+            M1["1. Market Data Ingestion Module"]
+            M2["2. Volatility & Eligibility Module"]
+        end
+
+        subgraph AdvisoryDomain ["Advisory Domain"]
+            M3["3. Advisory Signal Module"]
+        end
+
+        subgraph PlanDomain ["Plan & Scheduling Domain"]
+            M4["4. Plan Management Module"]
+            M5["5. Tranche Scheduling Module"]
+        end
+
+        subgraph ExecutionDomain ["Security & Execution Domain"]
+            M6["6. Trade Authorization & Execution Module"]
+            M7["7. Credential Management Module"]
+        end
+
+        subgraph UserDomain ["User & Communication Domain"]
+            M8["8. User, Auth & Notification Module"]
+        end
+
+        subgraph TADomain ["TA-Provided Additions (Isolated from Trading)"]
+            M9["9. Watchlist Module (FR-15)"]
+            M10["10. Trade History Module (FR-16)"]
+            M11["11. Investment Journal Module (FR-17)"]
+        end
+        
+        EventBus[["In-Process Event Bus"]]
+    end
+
+    M1 -->|Price Updates & Circuit Breaker Events| EventBus
+    EventBus --> M2
+    EventBus --> M3
+    EventBus --> M6
+    
+    M2 -->|Eligibility & Suppression State| M3
+    M3 -->|Signal Generated Event| M8
+    
+    M4 -->|Plan Setup (Zero Trades)| M5
+    M5 -->|Open 60s Window Event| M8
+    
+    M5 -.->|Tranche Auth Request| M6
+    M6 -->|Validate Token & Decrypt Key| M7
+    
+    %% TA-Provided module boundaries (Strictly Read-Only or Isolated)
+    M1 -.->|Market Ticks (Read-Only)| M9
+    M6 -.->|Confirmed Trades (Read-Only)| M10
+    M4 -.->|Plan IDs (Context Link Only)| M11
+    M3 -.->|Signal IDs (Context Link Only)| M11

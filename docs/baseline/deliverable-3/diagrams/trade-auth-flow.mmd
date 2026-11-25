@@ -1,0 +1,55 @@
+sequenceDiagram
+    autonumber
+    actor User as User Mobile App
+    participant Auth as Device Biometrics / PIN
+    participant Sched as Tranche Scheduling Module
+    participant Gateway as API Gateway
+    participant TradeAuth as Trade Auth & Execution Module
+    participant Market as Market Data Ingestion Module
+    participant Vault as Credential Management Module
+    participant Exchange as Digital Asset Exchange
+    participant DB as Execution Ledger (Append-Only)
+
+    Note over Sched,User: Tranche Due (24 Hours Later)
+    Sched->>Sched: Open 60-Second Window (expires_at = now + 60s)
+    Sched-->>User: Urgent Notification (Push & WhatsApp)
+
+    Note over User,TradeAuth: User Authorization Attempt
+    User->>Auth: Prompt Face ID / PIN
+    alt Biometric Fails or User Cancels
+        Auth-->>User: Verification Failed
+        User->>Sched: Abort (No Trade Executed)
+    else Biometric Successful
+        Auth-->>User: Sign Challenge Token (device key)
+        User->>Gateway: Submit Authorization (tranche_id, grant_token, timestamp)
+        Gateway->>TradeAuth: Validate & Execute Order
+    end
+
+    Note over TradeAuth,Exchange: Atomic Verification Gate (<60s TTL)
+    TradeAuth->>TradeAuth: 1. Check Server Time <= expires_at
+    alt Verification Arrives at Second 61+ (Timeout)
+        TradeAuth-->>Gateway: FAIL: 60s Window Expired
+        Gateway->>Sched: Mark EXPIRED_SKIPPED
+        Gateway-->>User: ❌ Tranche Expired and Permanently Skipped
+    else Time <= 60s (Valid)
+        TradeAuth->>Market: 2. Query Circuit Breaker & Current Price
+        alt Ticker Latency > 5s OR Data Age > 15s
+            Market-->>TradeAuth: Latency/Staleness Tripped
+            TradeAuth-->>Gateway: FAIL: Market Data Unavailable
+            Gateway-->>User: ❌ Locked: Market Data Unavailable
+        else Current Price > Entry Price * 1.02 (Price Shift > 2.0%)
+            Market-->>TradeAuth: Price Shift Detected
+            TradeAuth-->>Gateway: FAIL: Price Shift Exceeded 2.0%
+            Gateway->>Sched: Invalidate Tranche (PRICE_SHIFT_LOCKED)
+            Gateway-->>User: ❌ Locked: Price Shift Alert
+        else All Checks Pass
+            Market-->>TradeAuth: Market Healthy & Fresh
+            TradeAuth->>Vault: Retrieve Trade Credentials (Trade-Only)
+            Vault-->>TradeAuth: Decrypted Key
+            TradeAuth->>Exchange: POST /api/v3/order (Spot Market Buy)
+            Exchange-->>TradeAuth: Order Fill Confirmed (Executed Price, Qty)
+            TradeAuth->>DB: INSERT into executions (Append-Only)
+            TradeAuth->>Sched: Mark Tranche EXECUTED
+            TradeAuth-->>User: 🚀 Trade Executed Successfully
+        end
+    end

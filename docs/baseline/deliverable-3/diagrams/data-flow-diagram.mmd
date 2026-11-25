@@ -1,0 +1,57 @@
+flowchart LR
+    subgraph ExternalSources ["External Feeds & Systems"]
+        ExWS["Exchange WebSocket"]
+        ExREST["Exchange REST API"]
+        ExtUser["User Mobile Device"]
+        MetaWA["Meta WhatsApp API"]
+        FCM["Firebase Cloud Messaging"]
+    end
+
+    subgraph AppModules ["System Modules"]
+        M_Market["Market Data Ingestion"]
+        M_Vol["Volatility & Eligibility"]
+        M_Adv["Advisory Signal"]
+        M_Plan["Plan Management"]
+        M_Sched["Tranche Scheduling"]
+        M_Exec["Trade Execution & Auth"]
+        M_Vault["Credential Management"]
+        M_Notify["User & Notification"]
+    end
+
+    subgraph RelationalDB ["Shared Relational Database (Enforced Module Ownership)"]
+        T_Keys[("exchange_api_keys")]
+        T_Plans[("investment_plans")]
+        T_Tranches[("tranches")]
+        T_Signals[("advisory_signals")]
+        T_Exec[("executions (Append-Only)")]
+        T_Outbox[("notification_outbox")]
+    end
+
+    ExWS -->|Raw Ticks| M_Market
+    M_Market -->|Clean Ticks & Staleness| M_Vol
+    M_Market -->|Fresh Price Snapshots| M_Adv
+    M_Market -->|Price Check at Auth| M_Exec
+
+    M_Vol -->|Suppression Flag| M_Adv
+    M_Adv -->|Store Signals| T_Signals
+    M_Adv -->|Enqueue Alerts| T_Outbox
+
+    ExtUser -->|Setup Plan (5% Cap)| M_Plan
+    M_Plan -->|Store Plan| T_Plans
+    M_Plan -->|Schedule 3 Tranches| M_Sched
+    M_Sched -->|Store Tranches| T_Tranches
+    M_Sched -->|Enqueue Prompts| T_Outbox
+
+    T_Outbox -->|Async Dequeue| M_Notify
+    M_Notify -->|HTTPS <= 5s| MetaWA
+    M_Notify -->|HTTPS <= 5s| FCM
+
+    ExtUser -->|Biometric Grant Token| M_Exec
+    ExtUser -->|API Key (No Withdrawals)| M_Vault
+    M_Vault <-->|Permission Handshake| ExREST
+    M_Vault -->|Encrypted Key| T_Keys
+
+    M_Exec -->|Validate TTL & Shift| T_Tranches
+    M_Exec <-->|Fetch Trade Key| M_Vault
+    M_Exec -->|Signed Buy Order| ExREST
+    M_Exec -->|Record Fill| T_Exec

@@ -1,0 +1,7 @@
+Local policy-helper execution (Node VM loading TypeScript transpile output; not Jest):
+PASS — exactly 5% allocation accepted
+PASS — greater than 5% rejected
+PASS — zero allocation rejected
+PASS — three tranches spaced at 24 hours
+Result: 4/4 checks passed.
+Full service/database integration tests: NOT RUN.

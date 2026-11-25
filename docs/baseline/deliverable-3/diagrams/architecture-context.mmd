@@ -1,0 +1,29 @@
+flowchart TB
+    User["Retail Saver (User Mobile App)"]
+    
+    subgraph AppBoundary ["Human-Controlled Advisory Application System"]
+        CoreApp["Modular Monolith Core Engine"]
+    end
+    
+    subgraph ExternalServices ["External Systems & Infrastructure"]
+        ExchangeWS["Exchange WebSocket Stream (Ticker Feeds)"]
+        ExchangeREST["Exchange REST API (Balance & Spot Orders)"]
+        WhatsApp["Meta WhatsApp Cloud API"]
+        PushService["Mobile Push Service (FCM / APNs)"]
+        OTPService["2FA OTP Provider (SMS / Email)"]
+        DeviceBiometrics["Native OS Biometrics (Face ID / Touch ID)"]
+    end
+    
+    User <-->|Biometric Prompts & Signatures| DeviceBiometrics
+    User <-->|HTTPS API / WebSockets| CoreApp
+    
+    ExchangeWS -->|Real-Time Price Ticks| CoreApp
+    CoreApp <-->|Permission Handshake & Signed Buy Orders| ExchangeREST
+    
+    CoreApp -->|Async Outbox Alerts| WhatsApp
+    CoreApp -->|Async Push Notifications| PushService
+    CoreApp -->|PIN Recovery OTP| OTPService
+    
+    WhatsApp -.->|Advisory Alerts| User
+    PushService -.->|Authorization Prompts| User
+    OTPService -.->|Recovery OTP| User
