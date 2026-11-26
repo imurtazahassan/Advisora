@@ -1,0 +1,19 @@
+# Dependencies and build output
+node_modules/
+backend/dist/
+frontend/dist/
+*.tsbuildinfo
+
+# Local configuration and secrets
+.env
+.env.*
+!.env.example
+backend/.env
+frontend/.env
+
+# Logs and editor state
+*.log
+npm-debug.log*
+.DS_Store
+.vscode/
+.idea/

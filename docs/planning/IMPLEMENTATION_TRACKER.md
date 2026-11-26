@@ -28,12 +28,12 @@ A slice is not complete merely because code has been written. Its acceptance cri
 | VS-01 | User Access and Device Security | IMPLEMENTATION COMPLETE (ED-01 12-CHAR + ED25519 DEVICE UI) | UNIT (42/42), E2E (5/5) & PORT 3000 PASS (IN-MEMORY DB); TARGET POSTGRES PENDING | ACCEPTED (2026-11-25) |
 | VS-02 | Market Data and Asset Eligibility | IMPLEMENTATION PRESENT; eligibility remains `PENDING_POLICY` | Market-data policy unit suite included in 42-test run; no PostgreSQL or slice-specific E2E | NOT ACCEPTED |
 | VS-03 | Advisory Signal Generation | FOUNDATION ADDED; GENERATION FAILS CLOSED pending approved rules | Advisory policy unit suite included; no generation acceptance test | NOT ACCEPTED |
-| VS-04 | Investment Plan Management | IMPLEMENTATION ADDED | Plan policy unit suite included; no full plan workflow E2E | NOT ACCEPTED |
-| VS-05 | Tranche Scheduling and Human Authorization | IMPLEMENTATION ADDED; native biometric integration pending | No dedicated scheduler/auth-window suite in current run; PostgreSQL behavior unverified | NOT ACCEPTED |
-| VS-06 | Authorized Trade Execution | SIMULATED PATH ADDED; live exchange not selected | Execution policy unit suite included; no PostgreSQL ledger/immutability verification | NOT ACCEPTED |
-| VS-07 | Notifications | IN-APP OUTBOX ADDED; WhatsApp/push pending | No dedicated outbox/provider integration test in current run | NOT ACCEPTED |
-| VS-08 | Supporting Investment Features | IMPLEMENTATION ADDED | No dedicated supporting-feature test suite in current run | NOT ACCEPTED |
-| VS-09 | Integration and Final Validation | Build, lint, unit and smoke E2E run on 2026-11-26 | 7 backend unit suites/42 tests; 2 E2E suites/5 tests; both builds passed; lint exits 0 with 10 warnings; PostgreSQL unavailable due authentication | NOT ACCEPTED |
+| VS-04 | Investment Plan Management | IMPLEMENTATION PRESENT; create, list, pause/resume/cancel/replace UI | Allocation boundary, owner isolation, three scheduled tranches, and no trade on plan creation E2E; plan policy unit suite | NOT ACCEPTED |
+| VS-05 | Tranche Scheduling and Human Authorization | Implementation present; signed challenge UI; native biometrics pending | E2E rejects authorization before the scheduled window; OQ-05 scheduler behavior in code; no PostgreSQL scheduler verification | NOT ACCEPTED |
+| VS-06 | Authorized Trade Execution | Simulated adapter only; UI requires session key and valid signal | Execution policy unit tests; E2E confirms plan creation is not execution and pre-window attempt is rejected; valid-signal execution happy path not E2E-tested | NOT ACCEPTED |
+| VS-07 | Notifications | In-app outbox and UI present; external providers pending | Plan-created outbox event asserted in E2E; no external delivery test | NOT ACCEPTED |
+| VS-08 | Supporting Investment Features | Watchlist, journal, trades, CSV and UI present | No dedicated backend E2E coverage for watchlist/journal/CSV | NOT ACCEPTED |
+| VS-09 | Integration and Final Validation | Responsive dashboard, navigation, evidence and integrated build | 7 backend unit suites/42 tests; 3 E2E suites/7 tests; 1 frontend test file/3 tests; both builds passed; lint exits 0 with 7 backend auth-test warnings and 0 frontend warnings | NOT ACCEPTED |
 
 ## 4. Completion Rules
 
@@ -84,4 +84,4 @@ A slice can be marked ACCEPTED only when:
 
 **Current project status: VS-01 ACCEPTED (2026-11-25); VS-02–VS-09 IMPLEMENTATION PRESENT BUT UNACCEPTED (VS-03 GENERATION BLOCKED BY OPEN APPROVED RULES)**
 
-**Validation update (2026-11-26):** Configured backend/frontend tests, builds, and lint were run. Exact results and PostgreSQL limitation are recorded in `docs/evidence/VS-09/TEST_RESULTS.md`. Passing policy suites do not establish full slice acceptance. No new human acceptance has been recorded.
+**Validation update (2026-11-26):** Current root test, E2E, frontend test, build and lint commands passed. Exact results and coverage limits are recorded in `docs/evidence/VS-09/TEST_RESULTS.md`. Passing policy suites do not establish full slice acceptance. No new human acceptance has been recorded.

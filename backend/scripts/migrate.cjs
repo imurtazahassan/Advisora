@@ -1,7 +1,9 @@
-require('dotenv').config();
-const { Pool } = require('pg');
-const fs = require('node:fs');
 const path = require('node:path');
+const fs = require('node:fs');
+const rootEnv = path.resolve(__dirname, '../../.env');
+const backendEnv = path.resolve(__dirname, '../.env');
+require('dotenv').config({ path: fs.existsSync(rootEnv) ? rootEnv : backendEnv });
+const { Pool } = require('pg');
 
 async function main() {
   const pool = new Pool({

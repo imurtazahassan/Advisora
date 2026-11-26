@@ -10,6 +10,9 @@
     "build": "npm run build:frontend && npm run build:backend",
     "lint": "npm --prefix backend run lint && npm --prefix frontend run lint",
     "test": "npm --prefix backend test -- --runInBand",
+    "test:e2e": "npm --prefix backend run test:e2e -- --runInBand",
+    "test:frontend": "npm --prefix frontend run test",
+    "db:migrate": "npm --prefix backend run db:migrate",
     "dev": "npm run build && node backend/dist/main",
     "start": "node backend/dist/main"
   }

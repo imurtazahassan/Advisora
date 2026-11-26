@@ -1,13 +1,11 @@
-# VS-02 Test Results
+# VS-02 test evidence
 
-**Execution status:** NOT RUN in this environment.
+**Run date:** 2026-11-26
 
-| Check | Result | Notes |
-|---|---|---|
-| Market-data policy unit tests | NOT RUN | Jest dependencies are not installed in this work environment |
-| Backend TypeScript build | NOT RUN | Backend dependencies are not installed |
-| PostgreSQL migration 003 | NOT RUN | No project database connection is available here |
-| Authenticated endpoint integration | NOT RUN | Requires backend dependencies and PostgreSQL |
-| Frontend production build | NOT RUN | Frontend dependencies are not installed |
+- Backend unit suite: `market-data.policy.spec.ts` passed as part of `npm test` (7 suites, 42 tests).
+- Frontend dashboard render is covered by `npm run test:frontend` (3 tests total), but there is no market-specific component interaction test.
+- Market feed source is simulated. `PENDING_POLICY` remains until eligibility thresholds are approved.
+- PostgreSQL tick persistence and migration `003` were not tested against a PostgreSQL database. The local server requires credentials that are not available in environment variables or a `pgpass.conf` file.
+- No external/live market provider is integrated.
 
-No test pass is claimed. Run the project test/build commands after installing dependencies and applying migrations. Record actual output here before acceptance.
+**Status:** Partial automated coverage; VS-02 is not accepted.
