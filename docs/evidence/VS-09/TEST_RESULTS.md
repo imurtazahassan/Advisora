@@ -1,5 +1,24 @@
 # VS-09 Integration Validation Results
 
+## Re-run on 2026-11-26 (Windows, Node v24.15.0, npm 11.12.1)
+
+| Configured command | Outcome |
+|---|---|
+| `npm --prefix backend test -- --runInBand` | PASS — 7 suites, 42 tests |
+| `npm --prefix backend run test:e2e -- --runInBand` | PASS — 2 suites, 5 tests |
+| `npm --prefix backend run build` | PASS — NestJS production build |
+| `npm --prefix backend run lint` | PASS exit code; 8 warnings (1 `no-base-to-string`, 7 Jest `unbound-method`) |
+| `npm --prefix frontend run build` | PASS — TypeScript and Vite production build |
+| `npm --prefix frontend run lint` | PASS exit code; 2 React hook warnings in `src/App.tsx` |
+| Frontend tests | NOT CONFIGURED — `frontend/package.json` defines no test script or test framework |
+| `npm --prefix backend run db:migrate` against isolated PostgreSQL | NOT RUN — PostgreSQL service responds with `28P01` for documented default credentials; no `psql` client available; no existing database was modified |
+
+These checks establish unit, smoke-E2E, and build/lint status only. They do not verify PostgreSQL migrations or full acceptance of VS-02 through VS-09. Unit coverage includes auth, app controller, market-data policy, advisory policy, plan policy, and execution policy. The two E2E suites cover the app smoke route and VS-01 auth flows. Supporting-feature behavior has no dedicated automated suite in the current test set.
+
+The backend lockfile was repaired after `npm ci` detected that `bcryptjs` and `@types/bcryptjs`, required by `backend/package.json`, were absent from the lockfile. A clean backend install then completed successfully.
+
+## Historical evidence (2026-11-25)
+
 | Check | Result |
 |---|---|
 | TypeScript/TSX syntax transpilation | PASS — 41 files parsed with TypeScript transpileModule; syntax/transpile diagnostics absent |

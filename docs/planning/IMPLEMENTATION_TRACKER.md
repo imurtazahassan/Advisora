@@ -2,7 +2,7 @@
 
 **Project:** Human-Controlled Digital-Asset Advisory Application  
 **Status:** VS-01 ACCEPTED (2026-11-25, dev/test in-memory DB baseline; target PostgreSQL verification pending); VS-02–VS-09 remain unaccepted  
-**Last updated:** 2026-11-25
+**Last updated:** 2026-11-26
 
 ## 1. Purpose
 
@@ -26,14 +26,14 @@ A slice is not complete merely because code has been written. Its acceptance cri
 | Slice | Name | Implementation | Testing | Acceptance |
 |---|---|---|---|---|
 | VS-01 | User Access and Device Security | IMPLEMENTATION COMPLETE (ED-01 12-CHAR + ED25519 DEVICE UI) | UNIT (42/42), E2E (5/5) & PORT 3000 PASS (IN-MEMORY DB); TARGET POSTGRES PENDING | ACCEPTED (2026-11-25) |
-| VS-02 | Market Data and Asset Eligibility | IMPLEMENTATION RETAINED | NOT RUN | NOT ACCEPTED |
-| VS-03 | Advisory Signal Generation | FOUNDATION ADDED; GENERATION BLOCKED BY APPROVED OPEN RULES | NOT RUN | NOT ACCEPTED |
-| VS-04 | Investment Plan Management | IMPLEMENTATION ADDED | NOT RUN | NOT ACCEPTED |
-| VS-05 | Tranche Scheduling and Human Authorization | IMPLEMENTATION ADDED; NATIVE BIOMETRIC INTEGRATION PENDING | NOT RUN | NOT ACCEPTED |
-| VS-06 | Authorized Trade Execution | SIMULATED PATH ADDED; LIVE EXCHANGE NOT SELECTED | NOT RUN | NOT ACCEPTED |
-| VS-07 | Notifications | IN-APP OUTBOX ADDED; WHATSAPP/PUSH PENDING | NOT RUN | NOT ACCEPTED |
-| VS-08 | Supporting Investment Features | IMPLEMENTATION ADDED | NOT RUN | NOT ACCEPTED |
-| VS-09 | Integration and Final Validation | INTEGRATION/DOCS ADDED; BUILD AND E2E PENDING | NOT RUN | NOT ACCEPTED |
+| VS-02 | Market Data and Asset Eligibility | IMPLEMENTATION PRESENT; eligibility remains `PENDING_POLICY` | Market-data policy unit suite included in 42-test run; no PostgreSQL or slice-specific E2E | NOT ACCEPTED |
+| VS-03 | Advisory Signal Generation | FOUNDATION ADDED; GENERATION FAILS CLOSED pending approved rules | Advisory policy unit suite included; no generation acceptance test | NOT ACCEPTED |
+| VS-04 | Investment Plan Management | IMPLEMENTATION ADDED | Plan policy unit suite included; no full plan workflow E2E | NOT ACCEPTED |
+| VS-05 | Tranche Scheduling and Human Authorization | IMPLEMENTATION ADDED; native biometric integration pending | No dedicated scheduler/auth-window suite in current run; PostgreSQL behavior unverified | NOT ACCEPTED |
+| VS-06 | Authorized Trade Execution | SIMULATED PATH ADDED; live exchange not selected | Execution policy unit suite included; no PostgreSQL ledger/immutability verification | NOT ACCEPTED |
+| VS-07 | Notifications | IN-APP OUTBOX ADDED; WhatsApp/push pending | No dedicated outbox/provider integration test in current run | NOT ACCEPTED |
+| VS-08 | Supporting Investment Features | IMPLEMENTATION ADDED | No dedicated supporting-feature test suite in current run | NOT ACCEPTED |
+| VS-09 | Integration and Final Validation | Build, lint, unit and smoke E2E run on 2026-11-26 | 7 backend unit suites/42 tests; 2 E2E suites/5 tests; both builds passed; lint exits 0 with 10 warnings; PostgreSQL unavailable due authentication | NOT ACCEPTED |
 
 ## 4. Completion Rules
 
@@ -83,3 +83,5 @@ A slice can be marked ACCEPTED only when:
 - [ ] Evidence package reviewed.
 
 **Current project status: VS-01 ACCEPTED (2026-11-25); VS-02–VS-09 IMPLEMENTATION PRESENT BUT UNACCEPTED (VS-03 GENERATION BLOCKED BY OPEN APPROVED RULES)**
+
+**Validation update (2026-11-26):** Configured backend/frontend tests, builds, and lint were run. Exact results and PostgreSQL limitation are recorded in `docs/evidence/VS-09/TEST_RESULTS.md`. Passing policy suites do not establish full slice acceptance. No new human acceptance has been recorded.

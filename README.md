@@ -47,7 +47,7 @@ Advisory generation remains intentionally fail-closed until unresolved approved 
 See `docs/API_REFERENCE.md` for the authenticated route list.
 
 ## Important safety and implementation status
-See `docs/IMPLEMENTATION_STATUS_AND_LIMITATIONS.md`. This package has not yet passed a complete TypeScript build, Jest suite, PostgreSQL migration run or E2E test. No vertical slice is marked accepted. Exchange integration is simulated only; there are no withdrawal or transfer endpoints.
+See `docs/IMPLEMENTATION_STATUS_AND_LIMITATIONS.md` and `docs/evidence/VS-09/TEST_RESULTS.md`. Backend and frontend builds, backend unit/E2E suites, and lint were run on 2026-11-26; PostgreSQL migration verification remains blocked by local database authentication. VS-01 has a previously recorded human acceptance; VS-02 through VS-09 remain unaccepted. Exchange integration is simulated only; there are no withdrawal or transfer endpoints.
 
 
 ## Latest scheduler hardening

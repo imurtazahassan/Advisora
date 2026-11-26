@@ -38,7 +38,7 @@ This package integrates the uploaded project baseline with implementation work a
 4. Production exchange provider remains unselected; API permission inspection and secret storage are not implemented. Unverifiable permissions must remain inactive.
 5. WhatsApp and mobile push providers, Urdu fallback dispatch and NFR-04 provider-acceptance measurement are not implemented.
 6. Initial tranche schedule anchor and currency precision need owner confirmation. Current demo uses plan approval timestamp and 2-decimal USDT precision as explicit implementation assumptions only.
-7. PostgreSQL migrations, full TypeScript build, Jest suite, frontend build, API integration tests and end-to-end tests remain to be run in the user's environment.
+7. Migration execution for PostgreSQL migrations `001`–`006`, database-backed integration tests, and full end-to-end slice acceptance remain outstanding. The configured backend unit and smoke-E2E suites, backend/frontend production builds, and lint were run on 2026-11-26; exact commands and results are recorded in `docs/evidence/VS-09/TEST_RESULTS.md`.
 
 ## Scheduler hardening added after the integrated snapshot
 
@@ -50,13 +50,14 @@ This package integrates the uploaded project baseline with implementation work a
 - Plan adjustment now cancels the previous remainder and inserts the replacement plan/tranches in one database transaction, preventing a failed replacement from leaving the previous plan cancelled.
 - Detailed behavior and boundary cases are recorded in `docs/VS05_SCHEDULER_HARDENING.md`.
 
-## Verification status in this environment
+## Verification status in this environment (updated 2026-11-26)
 
 - **Build (`npm run build`)**: Passed (0 errors across Vite frontend and NestJS backend).
-- **Lint (`npm run lint`)**: Passed with 0 errors (4 pre-existing/type-aware warnings in `backend`, 2 hook warnings in `frontend`).
-- **Backend Unit Tests (`npm test`)**: Passed after configuring Jest/NestJS 12 ESM mode (`backend/jest.config.ts`, `backend/jest.setup.ts`) — **7/7 suites passed, 32/32 tests passed** (`auth.service.spec.ts`, `auth.guard.spec.ts`, `app.controller.spec.ts`, `plans.policy.spec.ts`, `execution.policy.spec.ts`, `advisory.policy.spec.ts`, `market-data.policy.spec.ts`).
-- **Backend E2E Smoke Test (`npm --prefix backend run test:e2e`)**: Passed (`test/app.e2e-spec.ts`, 1/1 suite, 1/1 test, running against the dev/test in-memory adapter).
-- **PostgreSQL Database & Migrations (`001`–`006`)**: No PostgreSQL server/client is running in this AI Studio container, so SQL migrations `001`–`006` and live PostgreSQL integration/immutability-trigger tests remain unverified against real Postgres.
+- **Builds:** Backend NestJS build and frontend TypeScript/Vite production build passed on 2026-11-26.
+- **Lint:** Backend and frontend lint commands exited successfully with 8 and 2 warnings respectively; warning details are in the VS-09 test results.
+- **Backend unit tests:** 7/7 suites and 42/42 tests passed on 2026-11-26.
+- **Backend E2E:** 2/2 suites and 5/5 tests passed on 2026-11-26, covering smoke routing and VS-01 auth flows, not complete VS-02–VS-09 workflows.
+- **PostgreSQL Database & Migrations (`001`–`006`):** A PostgreSQL service is present, but the documented default credentials fail with SQLSTATE `28P01`; no migrations were applied. Migrations and live database integration/immutability checks remain unverified. See `docs/evidence/VS-09/TEST_RESULTS.md`.
 
 ## AI Studio Runtime Migration (Development / Demo-Only)
 
@@ -68,4 +69,4 @@ This package integrates the uploaded project baseline with implementation work a
 - Added a development/test-only ephemeral `JWT_SECRET` fallback in `backend/src/auth/auth.module.ts` (`NODE_ENV` = `development` or `test`); non-dev/test startup fails closed if `JWT_SECRET` is missing or a placeholder.
 - Fixed NestJS DI export of `JwtModule` in `backend/src/auth/auth.module.ts`, TypeScript `TS1272` `import type` annotations across controllers/services, and Jest ESM support (`backend/jest.config.ts`, `backend/jest.setup.ts`, `backend/test/jest-e2e.json`).
 
-**Acceptance status:** Runtime adaptation is conditionally approved for development/demo execution only. **No vertical slice (VS-01 through VS-09) is accepted** until incremental validation, PostgreSQL verification, required tests, and human review pass.
+**Acceptance status:** Runtime adaptation is conditionally approved for development/demo execution only. VS-01 has a previously recorded human acceptance under its documented dev/test in-memory baseline. VS-02 through VS-09 remain unaccepted pending slice-specific acceptance evidence, PostgreSQL verification where applicable, and human review.
