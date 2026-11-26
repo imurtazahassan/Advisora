@@ -13,7 +13,7 @@
 | Frontend tests | NOT CONFIGURED — `frontend/package.json` defines no test script or test framework |
 | `npm --prefix backend run db:migrate` against isolated PostgreSQL | NOT RUN — PostgreSQL service is running; `psql` is installed outside PATH. No valid database credentials were available; sample credentials return `28P01`. No database was modified |
 
-These checks establish unit, smoke-E2E, and build/lint status only. They do not verify PostgreSQL migrations or full acceptance of VS-02 through VS-09. Unit coverage includes auth, app controller, market-data policy, advisory policy, plan policy, and execution policy. The initial two E2E suites covered the app smoke route and VS-01 auth flows. Supporting-feature behavior has no dedicated automated suite in the current test set.
+These checks establish unit, smoke-E2E, and build/lint status only. They do not verify PostgreSQL migrations or full acceptance of VS-02 through VS-09. Unit coverage includes auth, app controller, market-data policy, advisory policy, plan policy, and execution policy. The initial two E2E suites covered the app smoke route and VS-01 auth flows. Subsequent workflow suites are recorded below; supporting-feature E2E coverage is explicitly identified as using the in-memory adapter.
 
 The backend lockfile was repaired after `npm ci` detected that `bcryptjs` and `@types/bcryptjs`, required by `backend/package.json`, were absent from the lockfile. A clean backend install then completed successfully.
 

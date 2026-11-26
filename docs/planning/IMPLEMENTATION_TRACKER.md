@@ -32,7 +32,7 @@ A slice is not complete merely because code has been written. Its acceptance cri
 | VS-05 | Tranche Scheduling and Human Authorization | Implementation present; signed challenge UI; native biometrics pending | E2E rejects authorization before the scheduled window; OQ-05 scheduler behavior in code; no PostgreSQL scheduler verification | NOT ACCEPTED |
 | VS-06 | Authorized Trade Execution | Simulated adapter only; UI requires session key and valid signal | Execution policy unit tests; E2E confirms plan creation is not execution and pre-window attempt is rejected; valid-signal execution happy path not E2E-tested | NOT ACCEPTED |
 | VS-07 | Notifications | In-app outbox and UI present; external providers pending | Plan-created outbox event asserted in E2E; no external delivery test | NOT ACCEPTED |
-| VS-08 | Supporting Investment Features | Watchlist, journal, trades, CSV and UI present | No dedicated backend E2E coverage for watchlist/journal/CSV | NOT ACCEPTED |
+| VS-08 | Supporting Investment Features | Watchlist, journal, trades, CSV and UI present | In-memory E2E covers watchlist add/list/remove, journal create/edit/list/delete, and CSV export; PostgreSQL persistence remains unverified | NOT ACCEPTED |
 | VS-09 | Integration and Final Validation | Responsive dashboard, navigation, evidence and integrated build | 7 backend unit suites/42 tests; 3 E2E suites/8 tests; 1 frontend test file/3 tests; both builds passed; lint exits 0 with 7 backend auth-test warnings and 0 frontend warnings | NOT ACCEPTED |
 
 ## 4. Completion Rules
