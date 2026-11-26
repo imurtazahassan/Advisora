@@ -22,14 +22,14 @@ The backend lockfile was repaired after `npm ci` detected that `bcryptjs` and `@
 | Root command | Outcome |
 |---|---|
 | `npm test` | PASS — 7 backend unit suites, 42 tests |
-| `npm run test:e2e` | PASS — 3 backend E2E suites, 7 tests (includes plan allocation/ownership, no-trade-on-plan, outbox event, and scheduled-window rejection checks) |
+| `npm run test:e2e` | PASS — 3 backend E2E suites, 8 tests (includes plan allocation/ownership, no-trade-on-plan, outbox event, and scheduled-window rejection checks) |
 | `npm run test:frontend` | PASS — 1 Vitest file, 3 tests |
 | `npm run build` | PASS — frontend TypeScript/Vite production build and backend NestJS production build |
 | `npm run lint` | PASS — backend 7 warnings (`unbound-method` in auth tests); frontend 0 warnings |
 
 A manual local UI smoke check also passed registration, sign-in, dashboard loading, navigation, and the simulated/PENDING_POLICY display against the development-only in-memory adapter. The test account and application state were volatile and were discarded when the local process stopped. This was not a PostgreSQL test or slice acceptance.
 
-**Coverage limits:** VS-02 has market policy unit coverage; VS-03 has policy helper coverage and remains fail-closed; VS-04 has allocation/ownership/plan-creation E2E coverage; VS-05 has a negative pre-window authorization E2E check; VS-06 has execution-policy unit coverage and plan creation is verified to produce no trade, but the valid-signal execution happy path is not E2E-tested; VS-07 has a plan-created outbox assertion, not external provider delivery; VS-08 supporting data paths have no dedicated backend E2E suite. Frontend component tests cover auth/password feedback and dashboard initial render. These checks do not accept VS-02 through VS-09.
+**Coverage limits:** VS-02 has market policy unit coverage; VS-03 has policy helper coverage and remains fail-closed; VS-04 has allocation/ownership/plan-creation E2E coverage; VS-05 has a negative pre-window authorization E2E check; VS-06 has execution-policy unit coverage and plan creation is verified to produce no trade, but the valid-signal execution happy path is not E2E-tested; VS-07 has a plan-created outbox assertion, not external provider delivery; VS-08 watchlist and journal CRUD plus CSV export have in-memory E2E coverage; PostgreSQL persistence remains unverified. Frontend component tests cover auth/password feedback and dashboard initial render. These checks do not accept VS-02 through VS-09.
 
 ## Historical evidence (2026-11-25)
 

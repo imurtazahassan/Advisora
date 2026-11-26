@@ -2,9 +2,9 @@
 
 **Run date:** 2026-11-26
 
-- The frontend application shell, password feedback, and authenticated dashboard loading pass 3 Vitest tests.
-- The combined backend E2E flow checks user isolation for investment plans and confirms the user's trade list remains empty after plan creation.
-- This run contains no dedicated backend E2E tests for watchlist add/remove, journal create/edit/delete, CSV content/filtering, or signal accuracy presentation.
-- The production build and lint passed; these checks do not substitute for feature behavior tests.
+- Backend E2E verifies authenticated watchlist add/list/remove, journal create/edit/list/delete, and CSV export response type and header.
+- The checks pass against the development/test in-memory adapter; they do not establish PostgreSQL persistence or behavior after process restart.
+- The frontend app shell, password feedback, and authenticated dashboard initial loading pass 3 Vitest tests.
+- The production build and lint passed; those checks do not substitute for database verification.
 
-**Status:** Supporting views render; most VS-08 workflows lack dedicated automated coverage; VS-08 is not accepted.
+**Status:** Core supporting API paths have in-memory E2E coverage. PostgreSQL persistence remains unverified; VS-08 is not accepted.
