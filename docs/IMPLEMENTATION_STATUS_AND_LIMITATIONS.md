@@ -56,7 +56,7 @@ This package integrates the uploaded project baseline with implementation work a
 - **Builds:** Backend NestJS build and frontend TypeScript/Vite production build passed on 2026-11-26.
 - **Lint:** Backend and frontend lint commands exited successfully with 7 backend warnings and 0 frontend warnings; warning details are in the VS-09 test results.
 - **Backend unit tests:** 7/7 suites and 42/42 tests passed on 2026-11-26.
-- **Backend E2E:** 2/2 suites and 5/5 tests passed on 2026-11-26, covering smoke routing and VS-01 auth flows, not complete VS-02–VS-09 workflows.
+- **Backend E2E:** 3/3 suites and 8/8 tests passed on 2026-11-26, including plan authorization and supporting-feature workflows; this does not establish complete VS-02�VS-09 acceptance.
 - **PostgreSQL Database & Migrations (`001`–`006`):** A PostgreSQL service is running and `psql` is installed outside PATH, but valid credentials are not available; the sample credentials fail with SQLSTATE `28P01`. No migrations were applied. Migrations and live database integration/immutability checks remain unverified. See `docs/evidence/VS-09/TEST_RESULTS.md`.
 
 ## AI Studio Runtime Migration (Development / Demo-Only)
